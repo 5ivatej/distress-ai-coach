@@ -11,14 +11,14 @@ tags:
 
 An OpenEnv environment for training and evaluating AI coaches that help users prepare for difficult real-world conversations.
 
-This repo keeps the paper-inspired RL structure from RLFF-ESC:
+This repo keeps the paper-inspired training structure from RLFF-ESC:
 
 - deterministic environment
 - partially observable hidden state
 - hybrid immediate + future-oriented reward
 - separate reward model and policy model
 
-The change is the sub-domain. Instead of therapy-style support, this repo focuses on difficult conversation coaching.
+The domain is different. Instead of therapy-style support, this repo focuses on difficult-conversation coaching.
 
 ## Tasks
 
@@ -43,20 +43,16 @@ The value of a reply is often only visible later, so the environment rewards bot
 
 ## Two-model setup
 
-The repo supports:
+The current intended setup is:
 
-- a learned reward model
-- a learned policy model
+- reward model: `Qwen/Qwen2.5-3B-Instruct` trained with QLoRA as a future-oriented regressor
+- policy model: `Qwen/Qwen2.5-0.5B-Instruct` trained with LoRA/QLoRA on reward-guided trajectories
 
-Reward model:
+Scripts:
 
-- recommended practical model: `distilroberta-base`
-- script: [train_reward_model.py](/Users/5ivatej/Desktop/meta-hackathon/distress-ai-coach/train_reward_model.py)
-
-Policy model:
-
-- recommended practical model: `Qwen/Qwen2.5-0.5B-Instruct` or `TinyLlama/TinyLlama-1.1B-Chat-v1.0`
-- script: [train_trl.py](/Users/5ivatej/Desktop/meta-hackathon/distress-ai-coach/train_trl.py)
+- [train_reward_model.py](/Users/5ivatej/Desktop/meta-hackathon/distress-ai-coach/train_reward_model.py)
+- [train_trl.py](/Users/5ivatej/Desktop/meta-hackathon/distress-ai-coach/train_trl.py)
+- [src/reward_backend.py](/Users/5ivatej/Desktop/meta-hackathon/distress-ai-coach/src/reward_backend.py)
 
 ## Key files
 
@@ -68,30 +64,26 @@ Policy model:
 - [src/training_utils.py](/Users/5ivatej/Desktop/meta-hackathon/distress-ai-coach/src/training_utils.py)
 - [COLAB_README.md](/Users/5ivatej/Desktop/meta-hackathon/distress-ai-coach/COLAB_README.md)
 
-## Docker / Colab
+## Colab-first flow
 
-Model names are controlled from `.env`:
+The recommended runtime is Google Colab with a `T4` GPU.
 
-```env
-POLICY_MODEL_NAME=distilgpt2
-REWARD_MODEL_NAME=distilroberta-base
-REWARD_MODEL_OUTPUT_DIR=artifacts/reward_model
-POLICY_MODEL_OUTPUT_DIR=artifacts/policy_model
-```
-
-Recommended practical setup:
-
-```env
-POLICY_MODEL_NAME=Qwen/Qwen2.5-0.5B-Instruct
-REWARD_MODEL_NAME=distilroberta-base
-```
-
-Run order:
+Core commands:
 
 ```bash
-docker compose up --build env-server
-docker compose --profile reward up --build reward-trainer
-docker compose --profile train up --build trainer
+python train_reward_model.py           --model-name Qwen/Qwen2.5-3B-Instruct           --episodes-per-task 4           --epochs 1           --batch-size 1           --gradient-accumulation-steps 8           --max-length 1024           --use-4bit true           --output-dir artifacts/reward_model           --results-dir results
+
+python train_trl.py           --model-name Qwen/Qwen2.5-0.5B-Instruct           --reward-backend regression           --reward-model-path artifacts/reward_model           --episodes-per-task 4           --epochs 1           --batch-size 1           --gradient-accumulation-steps 8           --max-length 768           --use-4bit true           --output-dir artifacts/policy_model           --results-dir results
 ```
 
-This pivot keeps the original paper-aligned training idea, but applies it to a safer benchmark: AI coaching for difficult conversations, not AI therapy.
+`.env.example` matches those defaults. The detailed Colab runbook is in [COLAB_README.md](/Users/5ivatej/Desktop/meta-hackathon/distress-ai-coach/COLAB_README.md).
+
+## Important scope note
+
+This repo now supports:
+
+- a truly trained reward model path
+- 4-bit QLoRA-style loading for Colab CUDA runtimes
+- reward-guided policy training with a separate reward model
+
+It is still not a full PPO/GRPO RL implementation. The current policy stage is reward-guided supervised fine-tuning.

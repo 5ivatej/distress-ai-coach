@@ -26,13 +26,16 @@ services:
     command: >
       python3 train_trl.py
       --model-name ${POLICY_MODEL_NAME}
+      --reward-backend ${REWARD_BACKEND:-auto}
       --reward-model-path ${REWARD_MODEL_OUTPUT_DIR}
       --episodes-per-task ${POLICY_TRAIN_EPISODES_PER_TASK}
       --epochs ${POLICY_TRAIN_EPOCHS}
       --batch-size ${POLICY_TRAIN_BATCH_SIZE}
+      --gradient-accumulation-steps ${POLICY_TRAIN_GRAD_ACCUM:-8}
       --max-length ${POLICY_TRAIN_MAX_LENGTH}
       --output-dir ${POLICY_MODEL_OUTPUT_DIR}
       --results-dir ${TRAIN_RESULTS_DIR}
+      --use-4bit ${POLICY_TRAIN_USE_4BIT:-true}
     volumes:
       - ./artifacts:/app/artifacts
       - ./results:/app/results
@@ -54,9 +57,11 @@ services:
       --episodes-per-task ${REWARD_TRAIN_EPISODES_PER_TASK}
       --epochs ${REWARD_TRAIN_EPOCHS}
       --batch-size ${REWARD_TRAIN_BATCH_SIZE}
+      --gradient-accumulation-steps ${REWARD_TRAIN_GRAD_ACCUM:-8}
       --max-length ${REWARD_TRAIN_MAX_LENGTH}
       --output-dir ${REWARD_MODEL_OUTPUT_DIR}
       --results-dir ${TRAIN_RESULTS_DIR}
+      --use-4bit ${REWARD_TRAIN_USE_4BIT:-true}
     volumes:
       - ./artifacts:/app/artifacts
       - ./results:/app/results
