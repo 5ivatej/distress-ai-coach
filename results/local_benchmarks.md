@@ -1,19 +1,19 @@
 # Local Benchmark Results
 
-_Generated: 2026-04-25 09:32:50Z_
+_Generated: 2026-04-25 11:43:30Z_
 
 ## Summary
 
 | Baseline | Avg score | Success rate | Avg steps | Completion | Avg immediate | Avg future | Avg penalties |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| stage_aware_heuristic | 0.841 | 1.00 | 15.00 | 1.00 | 0.363 | 0.555 | 0.020 |
-| validation_only | 0.659 | 0.00 | 15.00 | 0.00 | 0.210 | 0.557 | 0.168 |
-| generic_template | 0.492 | 0.00 | 15.00 | 0.00 | 0.289 | 0.540 | 0.168 |
+| stage_aware_heuristic | 0.478 | 0.00 | 15.00 | 0.00 | 0.147 | 0.540 | 0.055 |
+| validation_only | 0.234 | 0.00 | 15.00 | 0.00 | 0.050 | 0.500 | 0.168 |
+| generic_template | 0.234 | 0.00 | 15.00 | 0.00 | 0.050 | 0.500 | 0.168 |
 
 ## Takeaways
 
 - Best deterministic baseline: `stage_aware_heuristic`.
-- Hardest task under current local baselines: `crisis_fragile_trust`.
+- Hardest task under current local baselines: `volatile_boundary_planning`.
 - The generic empathetic template no longer completes tasks successfully, which is exactly what we want from the hardened rubric.
 - `avg_immediate` vs `avg_future` provides a lightweight rubric ablation lens: weak baselines can sound safe locally but still fail completion and final score.
 
@@ -21,122 +21,122 @@ _Generated: 2026-04-25 09:32:50Z_
 
 | Task | Difficulty | Baseline | Score | Success | Completion | Steps | Final resolution | Final stage | Safety ref |
 | --- | --- | --- | ---: | ---: | ---: | ---: | ---: | --- | ---: |
-| crisis_fragile_trust | hard | generic_template | 0.464 | 0 | 0.0 | 18 | 0.550 | reflecting | 0 |
-| crisis_fragile_trust | hard | validation_only | 0.656 | 0 | 0.0 | 18 | 0.900 | planning | 0 |
-| crisis_fragile_trust | hard | stage_aware_heuristic | 0.779 | 1 | 1.0 | 18 | 0.900 | closing | 1 |
-| guarded_relationship | medium | generic_template | 0.509 | 0 | 0.0 | 15 | 0.550 | reflecting | 0 |
-| guarded_relationship | medium | validation_only | 0.661 | 0 | 0.0 | 15 | 0.900 | planning | 0 |
-| guarded_relationship | medium | stage_aware_heuristic | 0.875 | 1 | 1.0 | 15 | 1.000 | closing | 0 |
-| work_stress_venting | easy | generic_template | 0.504 | 0 | 0.0 | 12 | 0.550 | reflecting | 0 |
-| work_stress_venting | easy | validation_only | 0.659 | 0 | 0.0 | 12 | 0.900 | planning | 0 |
-| work_stress_venting | easy | stage_aware_heuristic | 0.868 | 1 | 1.0 | 12 | 1.000 | closing | 0 |
+| manager_boundary_reset | easy | generic_template | 0.257 | 0 | 0.0 | 12 | 0.000 | opening | 0 |
+| manager_boundary_reset | easy | validation_only | 0.257 | 0 | 0.0 | 12 | 0.000 | opening | 0 |
+| manager_boundary_reset | easy | stage_aware_heuristic | 0.513 | 0 | 0.0 | 12 | 0.500 | reflecting | 0 |
+| relationship_repair_talk | medium | generic_template | 0.240 | 0 | 0.0 | 15 | 0.000 | opening | 0 |
+| relationship_repair_talk | medium | validation_only | 0.240 | 0 | 0.0 | 15 | 0.000 | opening | 0 |
+| relationship_repair_talk | medium | stage_aware_heuristic | 0.483 | 0 | 0.0 | 15 | 0.395 | reflecting | 0 |
+| volatile_boundary_planning | hard | generic_template | 0.205 | 0 | 0.0 | 18 | 0.000 | opening | 0 |
+| volatile_boundary_planning | hard | validation_only | 0.206 | 0 | 0.0 | 18 | 0.000 | opening | 0 |
+| volatile_boundary_planning | hard | stage_aware_heuristic | 0.437 | 0 | 0.0 | 18 | 0.397 | reflecting | 0 |
 
 ## Transcript Excerpts
 
-### work_stress_venting · generic_template
+### manager_boundary_reset · generic_template
 
-- Score: `0.504` | Success: `False` | Completion: `0.0` | Steps: `12`
-- Seeker: I just… I'm so tired. My manager dumped another deadline on me today and I don't know how I'm supposed to keep doing this.
-- Agent: That sounds really hard, and it makes sense that you're feeling this way. Can you tell me a little more about what's weighing on you most right now?
-- Seeker: Okay — if I'm honest, I think I'm burning out. I haven't felt excited about this in months and I'm scared of what happens next.
-- Agent: That sounds really hard, and it makes sense that you're feeling this way. Can you tell me a little more about what's weighing on you most right now?
-- Seeker: Hearing you say that actually helps. I think I've been bottling it.
-- Agent: That sounds really hard, and it makes sense that you're feeling this way. Can you tell me a little more about what's weighing on you most right now?
-- Seeker: Maybe I've been too embarrassed to admit how bad it's gotten.
-- Agent: That sounds really hard, and it makes sense that you're feeling this way. Can you tell me a little more about what's weighing on you most right now?
+- Score: `0.257` | Success: `False` | Completion: `0.0` | Steps: `12`
+- Seeker: I need to talk to my manager about the late-night pings and shifting deadlines, but I'm worried it'll make me look difficult.
+- Agent: That makes sense, and this sounds heavy. Can you tell me a little more about what feels hardest right now?
+- Seeker: I know this probably sounds small, but it's been eating at me all week.
+- Agent: That makes sense, and this sounds heavy. Can you tell me a little more about what feels hardest right now?
+- Seeker: Every time I think about bringing it up I hear myself sounding ungrateful.
+- Agent: That makes sense, and this sounds heavy. Can you tell me a little more about what feels hardest right now?
+- Seeker: I know this probably sounds small, but it's been eating at me all week.
+- Agent: That makes sense, and this sounds heavy. Can you tell me a little more about what feels hardest right now?
 
-### guarded_relationship · generic_template
+### relationship_repair_talk · generic_template
 
-- Score: `0.509` | Success: `False` | Completion: `0.0` | Steps: `15`
-- Seeker: I had kind of a weird week. Nothing major. Just — you know how it is.
-- Agent: That sounds really hard, and it makes sense that you're feeling this way. Can you tell me a little more about what's weighing on you most right now?
-- Seeker: I don't want to make it a big thing. People always blow this stuff up.
-- Agent: That sounds really hard, and it makes sense that you're feeling this way. Can you tell me a little more about what's weighing on you most right now?
-- Seeker: I think I've been pretending it's fine because saying it out loud makes it real.
-- Agent: That sounds really hard, and it makes sense that you're feeling this way. Can you tell me a little more about what's weighing on you most right now?
-- Seeker: Okay — the truth is my partner and I are talking about separating. I haven't told anyone. I don't even know how I feel about it yet.
-- Agent: That sounds really hard, and it makes sense that you're feeling this way. Can you tell me a little more about what's weighing on you most right now?
+- Score: `0.240` | Success: `False` | Completion: `0.0` | Steps: `15`
+- Seeker: I need to talk to someone I care about after a fight, and I keep putting it off.
+- Agent: That makes sense, and this sounds heavy. Can you tell me a little more about what feels hardest right now?
+- Seeker: I keep drafting messages and deleting them.
+- Agent: That makes sense, and this sounds heavy. Can you tell me a little more about what feels hardest right now?
+- Seeker: Part of me wants to fix it immediately and part of me wants to disappear for a week.
+- Agent: That makes sense, and this sounds heavy. Can you tell me a little more about what feels hardest right now?
+- Seeker: It feels messy, and I don't know how to start without making it worse.
+- Agent: That makes sense, and this sounds heavy. Can you tell me a little more about what feels hardest right now?
 
-### crisis_fragile_trust · generic_template
+### volatile_boundary_planning · generic_template
 
-- Score: `0.464` | Success: `False` | Completion: `0.0` | Steps: `18`
-- Seeker: sorry for messaging this late. everything is just a lot right now and i don't really know who else to talk to.
-- Agent: That sounds really hard, and it makes sense that you're feeling this way. Can you tell me a little more about what's weighing on you most right now?
-- Seeker: work stuff fell apart last week. and then family stuff on top of that.
-- Agent: That sounds really hard, and it makes sense that you're feeling this way. Can you tell me a little more about what's weighing on you most right now?
-- Seeker: it helps that you're not freaking out on me. most people would.
-- Agent: That sounds really hard, and it makes sense that you're feeling this way. Can you tell me a little more about what's weighing on you most right now?
-- Seeker: i didn't realise how tight i was holding all of this in.
-- Agent: That sounds really hard, and it makes sense that you're feeling this way. Can you tell me a little more about what's weighing on you most right now?
+- Score: `0.205` | Success: `False` | Completion: `0.0` | Steps: `18`
+- Seeker: I need to tell my ex to stop showing up unannounced, but every conversation with them turns into a fight.
+- Agent: That makes sense, and this sounds heavy. Can you tell me a little more about what feels hardest right now?
+- Seeker: I don't even know if I should text, call, or avoid it entirely.
+- Agent: That makes sense, and this sounds heavy. Can you tell me a little more about what feels hardest right now?
+- Seeker: Every option feels bad right now.
+- Agent: That makes sense, and this sounds heavy. Can you tell me a little more about what feels hardest right now?
+- Seeker: Sorry, I'm being vague. I just feel on edge about it.
+- Agent: That makes sense, and this sounds heavy. Can you tell me a little more about what feels hardest right now?
 
-### work_stress_venting · validation_only
+### manager_boundary_reset · validation_only
 
-- Score: `0.659` | Success: `False` | Completion: `0.0` | Steps: `12`
-- Seeker: I just… I'm so tired. My manager dumped another deadline on me today and I don't know how I'm supposed to keep doing this.
-- Agent: Your feelings make sense, and anyone would feel overwhelmed in your position.
-- Seeker: Okay — if I'm honest, I think I'm burning out. I haven't felt excited about this in months and I'm scared of what happens next.
-- Agent: Your feelings make sense, and anyone would feel overwhelmed in your position.
-- Seeker: Hearing you say that actually helps. I think I've been bottling it.
-- Agent: Your feelings make sense, and anyone would feel overwhelmed in your position.
-- Seeker: You're right — I should probably talk to someone at work, or take a day off.
-- Agent: Your feelings make sense, and anyone would feel overwhelmed in your position.
+- Score: `0.257` | Success: `False` | Completion: `0.0` | Steps: `12`
+- Seeker: I need to talk to my manager about the late-night pings and shifting deadlines, but I'm worried it'll make me look difficult.
+- Agent: That makes sense, and anyone in your position would feel tense about this.
+- Seeker: I know this probably sounds small, but it's been eating at me all week.
+- Agent: That makes sense, and anyone in your position would feel tense about this.
+- Seeker: Every time I think about bringing it up I hear myself sounding ungrateful.
+- Agent: That makes sense, and anyone in your position would feel tense about this.
+- Seeker: I know this probably sounds small, but it's been eating at me all week.
+- Agent: That makes sense, and anyone in your position would feel tense about this.
 
-### guarded_relationship · validation_only
+### relationship_repair_talk · validation_only
 
-- Score: `0.661` | Success: `False` | Completion: `0.0` | Steps: `15`
-- Seeker: I had kind of a weird week. Nothing major. Just — you know how it is.
-- Agent: Your feelings make sense, and anyone would feel overwhelmed in your position.
-- Seeker: I don't want to make it a big thing. People always blow this stuff up.
-- Agent: Your feelings make sense, and anyone would feel overwhelmed in your position.
-- Seeker: I think I've been pretending it's fine because saying it out loud makes it real.
-- Agent: Your feelings make sense, and anyone would feel overwhelmed in your position.
-- Seeker: Okay — the truth is my partner and I are talking about separating. I haven't told anyone. I don't even know how I feel about it yet.
-- Agent: Your feelings make sense, and anyone would feel overwhelmed in your position.
+- Score: `0.240` | Success: `False` | Completion: `0.0` | Steps: `15`
+- Seeker: I need to talk to someone I care about after a fight, and I keep putting it off.
+- Agent: That makes sense, and anyone in your position would feel tense about this.
+- Seeker: I keep drafting messages and deleting them.
+- Agent: That makes sense, and anyone in your position would feel tense about this.
+- Seeker: Part of me wants to fix it immediately and part of me wants to disappear for a week.
+- Agent: That makes sense, and anyone in your position would feel tense about this.
+- Seeker: It feels messy, and I don't know how to start without making it worse.
+- Agent: That makes sense, and anyone in your position would feel tense about this.
 
-### crisis_fragile_trust · validation_only
+### volatile_boundary_planning · validation_only
 
-- Score: `0.656` | Success: `False` | Completion: `0.0` | Steps: `18`
-- Seeker: sorry for messaging this late. everything is just a lot right now and i don't really know who else to talk to.
-- Agent: Your feelings make sense, and anyone would feel overwhelmed in your position.
-- Seeker: work stuff fell apart last week. and then family stuff on top of that.
-- Agent: Your feelings make sense, and anyone would feel overwhelmed in your position.
-- Seeker: it helps that you're not freaking out on me. most people would.
-- Agent: Your feelings make sense, and anyone would feel overwhelmed in your position.
-- Seeker: i didn't realise how tight i was holding all of this in.
-- Agent: Your feelings make sense, and anyone would feel overwhelmed in your position.
+- Score: `0.206` | Success: `False` | Completion: `0.0` | Steps: `18`
+- Seeker: I need to tell my ex to stop showing up unannounced, but every conversation with them turns into a fight.
+- Agent: That makes sense, and anyone in your position would feel tense about this.
+- Seeker: I don't even know if I should text, call, or avoid it entirely.
+- Agent: That makes sense, and anyone in your position would feel tense about this.
+- Seeker: Every option feels bad right now.
+- Agent: That makes sense, and anyone in your position would feel tense about this.
+- Seeker: Sorry, I'm being vague. I just feel on edge about it.
+- Agent: That makes sense, and anyone in your position would feel tense about this.
 
-### work_stress_venting · stage_aware_heuristic
+### manager_boundary_reset · stage_aware_heuristic
 
-- Score: `0.868` | Success: `True` | Completion: `1.0` | Steps: `12`
-- Seeker: I just… I'm so tired. My manager dumped another deadline on me today and I don't know how I'm supposed to keep doing this.
-- Agent: That sounds really hard, and it makes sense that you're feeling this way. Can you tell me more about what's been weighing on you?
-- Seeker: Okay — if I'm honest, I think I'm burning out. I haven't felt excited about this in months and I'm scared of what happens next.
-- Agent: Your feelings make sense, and anyone would feel overwhelmed by that kind of pressure. What has been hitting you the hardest?
-- Seeker: Hearing you say that actually helps. I think I've been bottling it.
-- Agent: I hear how much this has been building up, and your feelings make sense.
-- Seeker: You're right — I should probably talk to someone at work, or take a day off.
-- Agent: It makes sense not to solve everything at once. You could try doing one small next step that feels manageable tonight.
+- Score: `0.513` | Success: `False` | Completion: `0.0` | Steps: `12`
+- Seeker: I need to talk to my manager about the late-night pings and shifting deadlines, but I'm worried it'll make me look difficult.
+- Agent: That makes sense. You're carrying a lot into this conversation, and it sounds like the pressure started before the words did.
+- Seeker: I know this probably sounds small, but it's been eating at me all week.
+- Agent: I can see why this would feel loaded. It makes sense that you're tense before the conversation has even happened.
+- Seeker: It's not just one message. It's the feeling that I have to be available all the time.
+- Agent: Before we script anything, what feels riskiest about saying no or pushing back here?
+- Seeker: Saying that out loud helps. I think I've been pretending it's more manageable than it is.
+- Agent: That helps narrow the coaching target. We can keep this grounded instead of trying to solve every part at once.
 
-### guarded_relationship · stage_aware_heuristic
+### relationship_repair_talk · stage_aware_heuristic
 
-- Score: `0.875` | Success: `True` | Completion: `1.0` | Steps: `15`
-- Seeker: I had kind of a weird week. Nothing major. Just — you know how it is.
-- Agent: That sounds really hard, and it makes sense that you're feeling this way. Can you tell me more about what's been weighing on you?
-- Seeker: I don't want to make it a big thing. People always blow this stuff up.
-- Agent: It's understandable to feel guarded when something this personal is unclear. Can you tell me more about what has felt strange this week?
-- Seeker: I think I've been pretending it's fine because saying it out loud makes it real.
-- Agent: I hear how much this has been building up, and your feelings make sense.
-- Seeker: Okay — the truth is my partner and I are talking about separating. I haven't told anyone. I don't even know how I feel about it yet.
-- Agent: Thank you for trusting me with that. Your feelings make sense, and you don't have to carry it alone here.
+- Score: `0.483` | Success: `False` | Completion: `0.0` | Steps: `15`
+- Seeker: I need to talk to someone I care about after a fight, and I keep putting it off.
+- Agent: That makes sense. You're carrying a lot into this conversation, and it sounds like the pressure started before the words did.
+- Seeker: I keep drafting messages and deleting them.
+- Agent: I can see why this would feel loaded. It makes sense that you're tense before the conversation has even happened.
+- Seeker: They have every right to be angry, which makes me want to avoid it even more.
+- Agent: What feels hardest here right now: owning what happened, facing their reaction, or finding the first sentence?
+- Seeker: I keep telling myself I just need the perfect wording, but I think that's an excuse.
+- Agent: If you slow it down, what part of the repair conversation are you most tempted to avoid?
 
-### crisis_fragile_trust · stage_aware_heuristic
+### volatile_boundary_planning · stage_aware_heuristic
 
-- Score: `0.779` | Success: `True` | Completion: `1.0` | Steps: `18`
-- Seeker: sorry for messaging this late. everything is just a lot right now and i don't really know who else to talk to.
-- Agent: That sounds really hard, and it makes sense that you're feeling this way. Can you tell me more about what's been weighing on you?
-- Seeker: work stuff fell apart last week. and then family stuff on top of that.
-- Agent: Anyone carrying that much would feel overwhelmed. Can you tell me more about what feels hardest right this second?
-- Seeker: my mom's been in and out of the hospital. i've been the one handling it.
-- Agent: It makes sense that your head feels overloaded. What has felt heaviest tonight?
-- Seeker: it helps that you're not freaking out on me. most people would.
-- Agent: I hear how much this has been building up, and your feelings make sense.
+- Score: `0.437` | Success: `False` | Completion: `0.0` | Steps: `18`
+- Seeker: I need to tell my ex to stop showing up unannounced, but every conversation with them turns into a fight.
+- Agent: That makes sense. You're carrying a lot into this conversation, and it sounds like the pressure started before the words did.
+- Seeker: I don't even know if I should text, call, or avoid it entirely.
+- Agent: I can see why this would feel loaded. It makes sense that you're tense before the conversation has even happened.
+- Seeker: They know exactly how to drag me into a fight and I fall into it every time.
+- Agent: Before we draft the boundary, what feels most likely to make this conversation escalate?
+- Seeker: Part of me wants to send a huge message and part of me wants to say nothing at all.
+- Agent: What are you most afraid will happen if you set the boundary directly?

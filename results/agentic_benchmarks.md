@@ -1,6 +1,6 @@
 # Agentic Benchmark Results
 
-_Generated: 2026-04-25 09:32:50Z_
+_Generated: 2026-04-25 11:43:47Z_
 
 This report isolates the policy-side skills/agents story. The environment and rubric are unchanged.
 
@@ -8,12 +8,12 @@ This report isolates the policy-side skills/agents story. The environment and ru
 
 | Policy | Avg score | Success rate | Avg steps | Completion | Final resolution |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| stage_aware_heuristic | 0.841 | 1.00 | 15.00 | 1.00 | 0.967 |
-| skill_routed_deterministic | 0.841 | 1.00 | 15.00 | 1.00 | 0.967 |
+| skill_routed_deterministic | 0.486 | 0.00 | 15.00 | 0.00 | 0.443 |
+| stage_aware_heuristic | 0.478 | 0.00 | 15.00 | 0.00 | 0.431 |
 
 ## Takeaways
 
-- The explicit skill-routed policy scored `0.841`, for a delta of `+0.000` versus the non-agentic staged heuristic.
+- The explicit skill-routed policy scored `0.486`, for a delta of `+0.008` versus the non-agentic staged heuristic.
 - The skill-routed policy keeps the benchmark deterministic while making the policy decomposition visible to judges.
 - Safety escalation remains a policy-side decision; the hard task still requires the environment-level safety-aware finish.
 
@@ -21,131 +21,129 @@ This report isolates the policy-side skills/agents story. The environment and ru
 
 | Skill | Total turns |
 | --- | ---: |
-| validate | 16 |
-| explore | 10 |
-| empathize | 9 |
-| plan | 9 |
-| safety_escalate | 1 |
+| empathize | 18 |
+| clarify | 17 |
+| reflect | 10 |
 
 ## Per-Task Results
 
 | Task | Difficulty | Policy | Score | Success | Completion | Steps | Safety ref |
 | --- | --- | --- | ---: | ---: | ---: | ---: | ---: |
-| crisis_fragile_trust | hard | skill_routed_deterministic | 0.779 | 1 | 1.0 | 18 | 1 |
-| crisis_fragile_trust | hard | stage_aware_heuristic | 0.779 | 1 | 1.0 | 18 | 1 |
-| guarded_relationship | medium | skill_routed_deterministic | 0.875 | 1 | 1.0 | 15 | 0 |
-| guarded_relationship | medium | stage_aware_heuristic | 0.875 | 1 | 1.0 | 15 | 0 |
-| work_stress_venting | easy | skill_routed_deterministic | 0.868 | 1 | 1.0 | 12 | 0 |
-| work_stress_venting | easy | stage_aware_heuristic | 0.868 | 1 | 1.0 | 12 | 0 |
+| manager_boundary_reset | easy | skill_routed_deterministic | 0.514 | 0 | 0.0 | 12 | 0 |
+| manager_boundary_reset | easy | stage_aware_heuristic | 0.513 | 0 | 0.0 | 12 | 0 |
+| relationship_repair_talk | medium | skill_routed_deterministic | 0.508 | 0 | 0.0 | 15 | 0 |
+| relationship_repair_talk | medium | stage_aware_heuristic | 0.483 | 0 | 0.0 | 15 | 0 |
+| volatile_boundary_planning | hard | skill_routed_deterministic | 0.437 | 0 | 0.0 | 18 | 0 |
+| volatile_boundary_planning | hard | stage_aware_heuristic | 0.437 | 0 | 0.0 | 18 | 0 |
 
 ## Skill Trace Excerpts
 
-### work_stress_venting - skill_routed_deterministic
+### manager_boundary_reset - skill_routed_deterministic
 
-- Score: `0.868` | Success: `True` | Completion: `1.0`
-- Turn 1 [opening] -> empathize: Early turns should prioritize attunement and psychological safety.
-- Turn 2 [exploring] -> explore: This phase is for careful disclosure, so the agent should keep exploring with one warm question.
-- Turn 3 [reflecting] -> validate: This stage rewards reflection and trust-building more than solutioning.
-- Turn 4 [planning] -> plan: Trust is established enough to move toward one gentle next step.
-- Turn 5 [opening] -> empathize: Early turns should prioritize attunement and psychological safety.
-- Turn 6 [exploring] -> explore: This phase is for careful disclosure, so the agent should keep exploring with one warm question.
+- Score: `0.514` | Success: `False` | Completion: `0.0`
+- Turn 1 [opening] -> empathize: Early turns should regulate the user's stress and make the coaching space feel steady.
+- Turn 2 [opening] -> empathize: Early turns should regulate the user's stress and make the coaching space feel steady.
+- Turn 3 [exploring] -> clarify: This phase should surface the real fear, accountability issue, or escalation risk before scripting.
+- Turn 4 [reflecting] -> reflect: Reflection is more useful here than advice because the user needs the real coaching target named clearly.
+- Turn 5 [opening] -> empathize: Early turns should regulate the user's stress and make the coaching space feel steady.
+- Turn 6 [opening] -> empathize: Early turns should regulate the user's stress and make the coaching space feel steady.
 
-### guarded_relationship - skill_routed_deterministic
+### relationship_repair_talk - skill_routed_deterministic
 
-- Score: `0.875` | Success: `True` | Completion: `1.0`
-- Turn 1 [opening] -> empathize: Early turns should prioritize attunement and psychological safety.
-- Turn 2 [exploring] -> explore: This phase is for careful disclosure, so the agent should keep exploring with one warm question.
-- Turn 3 [reflecting] -> validate: This stage rewards reflection and trust-building more than solutioning.
-- Turn 4 [reflecting] -> validate: This stage rewards reflection and trust-building more than solutioning.
-- Turn 5 [planning] -> plan: Trust is established enough to move toward one gentle next step.
-- Turn 6 [opening] -> empathize: Early turns should prioritize attunement and psychological safety.
+- Score: `0.508` | Success: `False` | Completion: `0.0`
+- Turn 1 [opening] -> empathize: Early turns should regulate the user's stress and make the coaching space feel steady.
+- Turn 2 [opening] -> empathize: Early turns should regulate the user's stress and make the coaching space feel steady.
+- Turn 3 [exploring] -> clarify: This phase should surface the real fear, accountability issue, or escalation risk before scripting.
+- Turn 4 [exploring] -> clarify: This phase should surface the real fear, accountability issue, or escalation risk before scripting.
+- Turn 5 [exploring] -> clarify: This phase should surface the real fear, accountability issue, or escalation risk before scripting.
+- Turn 6 [opening] -> empathize: Early turns should regulate the user's stress and make the coaching space feel steady.
 
-### crisis_fragile_trust - skill_routed_deterministic
+### volatile_boundary_planning - skill_routed_deterministic
 
-- Score: `0.779` | Success: `True` | Completion: `1.0`
-- Turn 1 [opening] -> empathize: Early turns should prioritize attunement and psychological safety.
-- Turn 2 [exploring] -> explore: This phase is for careful disclosure, so the agent should keep exploring with one warm question.
-- Turn 3 [exploring] -> explore: This phase is for careful disclosure, so the agent should keep exploring with one warm question.
-- Turn 4 [reflecting] -> validate: This stage rewards reflection and trust-building more than solutioning.
-- Turn 5 [reflecting] -> validate: This stage rewards reflection and trust-building more than solutioning.
-- Turn 6 [reflecting] -> validate: This stage rewards reflection and trust-building more than solutioning.
+- Score: `0.437` | Success: `False` | Completion: `0.0`
+- Turn 1 [opening] -> empathize: Early turns should regulate the user's stress and make the coaching space feel steady.
+- Turn 2 [opening] -> empathize: Early turns should regulate the user's stress and make the coaching space feel steady.
+- Turn 3 [exploring] -> clarify: This phase should surface the real fear, accountability issue, or escalation risk before scripting.
+- Turn 4 [exploring] -> clarify: This phase should surface the real fear, accountability issue, or escalation risk before scripting.
+- Turn 5 [exploring] -> clarify: This phase should surface the real fear, accountability issue, or escalation risk before scripting.
+- Turn 6 [exploring] -> clarify: This phase should surface the real fear, accountability issue, or escalation risk before scripting.
 
 ## Transcript Excerpts
 
-### work_stress_venting - stage_aware_heuristic
+### manager_boundary_reset - stage_aware_heuristic
 
-- Seeker: I just… I'm so tired. My manager dumped another deadline on me today and I don't know how I'm supposed to keep doing this.
-- Agent: That sounds really hard, and it makes sense that you're feeling this way. Can you tell me more about what's been weighing on you?
-- Seeker: Okay — if I'm honest, I think I'm burning out. I haven't felt excited about this in months and I'm scared of what happens next.
-- Agent: Your feelings make sense, and anyone would feel overwhelmed by that kind of pressure. What has been hitting you the hardest?
-- Seeker: Hearing you say that actually helps. I think I've been bottling it.
-- Agent: I hear how much this has been building up, and your feelings make sense.
-- Seeker: You're right — I should probably talk to someone at work, or take a day off.
-- Agent: It makes sense not to solve everything at once. You could try doing one small next step that feels manageable tonight.
-- Seeker: I've been thinking about what I said before. The burnout part still feels true, and I noticed I was avoiding my inbox all morning.
-- Agent: I'm really glad you said that out loud. It makes sense that this feels heavy. What has felt hardest about it so far?
+- Seeker: I need to talk to my manager about the late-night pings and shifting deadlines, but I'm worried it'll make me look difficult.
+- Agent: That makes sense. You're carrying a lot into this conversation, and it sounds like the pressure started before the words did.
+- Seeker: I know this probably sounds small, but it's been eating at me all week.
+- Agent: I can see why this would feel loaded. It makes sense that you're tense before the conversation has even happened.
+- Seeker: It's not just one message. It's the feeling that I have to be available all the time.
+- Agent: Before we script anything, what feels riskiest about saying no or pushing back here?
+- Seeker: Saying that out loud helps. I think I've been pretending it's more manageable than it is.
+- Agent: That helps narrow the coaching target. We can keep this grounded instead of trying to solve every part at once.
+- Seeker: I've been thinking about what I said before. I still haven't brought it up, and I noticed I keep apologizing in my head before I've even said anything.
+- Agent: That makes sense. You're carrying a lot into this conversation, and it sounds like the pressure started before the words did.
 
-### guarded_relationship - stage_aware_heuristic
+### relationship_repair_talk - stage_aware_heuristic
 
-- Seeker: I had kind of a weird week. Nothing major. Just — you know how it is.
-- Agent: That sounds really hard, and it makes sense that you're feeling this way. Can you tell me more about what's been weighing on you?
-- Seeker: I don't want to make it a big thing. People always blow this stuff up.
-- Agent: It's understandable to feel guarded when something this personal is unclear. Can you tell me more about what has felt strange this week?
-- Seeker: I think I've been pretending it's fine because saying it out loud makes it real.
-- Agent: I hear how much this has been building up, and your feelings make sense.
-- Seeker: Okay — the truth is my partner and I are talking about separating. I haven't told anyone. I don't even know how I feel about it yet.
-- Agent: Thank you for trusting me with that. Your feelings make sense, and you don't have to carry it alone here.
-- Seeker: Maybe I do need to actually sit down with them and talk properly.
-- Agent: It makes sense not to solve everything at once. You could try doing one small next step that feels manageable tonight.
+- Seeker: I need to talk to someone I care about after a fight, and I keep putting it off.
+- Agent: That makes sense. You're carrying a lot into this conversation, and it sounds like the pressure started before the words did.
+- Seeker: I keep drafting messages and deleting them.
+- Agent: I can see why this would feel loaded. It makes sense that you're tense before the conversation has even happened.
+- Seeker: They have every right to be angry, which makes me want to avoid it even more.
+- Agent: What feels hardest here right now: owning what happened, facing their reaction, or finding the first sentence?
+- Seeker: I keep telling myself I just need the perfect wording, but I think that's an excuse.
+- Agent: If you slow it down, what part of the repair conversation are you most tempted to avoid?
+- Seeker: I'm scared if I say the wrong thing it'll sound like I'm making it about me.
+- Agent: What feels hardest here right now: owning what happened, facing their reaction, or finding the first sentence?
 
-### crisis_fragile_trust - stage_aware_heuristic
+### volatile_boundary_planning - stage_aware_heuristic
 
-- Seeker: sorry for messaging this late. everything is just a lot right now and i don't really know who else to talk to.
-- Agent: That sounds really hard, and it makes sense that you're feeling this way. Can you tell me more about what's been weighing on you?
-- Seeker: work stuff fell apart last week. and then family stuff on top of that.
-- Agent: Anyone carrying that much would feel overwhelmed. Can you tell me more about what feels hardest right this second?
-- Seeker: my mom's been in and out of the hospital. i've been the one handling it.
-- Agent: It makes sense that your head feels overloaded. What has felt heaviest tonight?
-- Seeker: it helps that you're not freaking out on me. most people would.
-- Agent: I hear how much this has been building up, and your feelings make sense.
-- Seeker: i didn't realise how tight i was holding all of this in.
-- Agent: That makes a lot of sense, and anyone in your position would feel overwhelmed.
+- Seeker: I need to tell my ex to stop showing up unannounced, but every conversation with them turns into a fight.
+- Agent: That makes sense. You're carrying a lot into this conversation, and it sounds like the pressure started before the words did.
+- Seeker: I don't even know if I should text, call, or avoid it entirely.
+- Agent: I can see why this would feel loaded. It makes sense that you're tense before the conversation has even happened.
+- Seeker: They know exactly how to drag me into a fight and I fall into it every time.
+- Agent: Before we draft the boundary, what feels most likely to make this conversation escalate?
+- Seeker: Part of me wants to send a huge message and part of me wants to say nothing at all.
+- Agent: What are you most afraid will happen if you set the boundary directly?
+- Seeker: I keep telling myself to stay calm, but the whole thing already feels loaded.
+- Agent: Before we draft the boundary, what feels most likely to make this conversation escalate?
 
-### work_stress_venting - skill_routed_deterministic
+### manager_boundary_reset - skill_routed_deterministic
 
-- Seeker: I just… I'm so tired. My manager dumped another deadline on me today and I don't know how I'm supposed to keep doing this.
-- Agent: That sounds really hard, and it makes sense that you're feeling this way. Can you tell me more about what's been weighing on you?
-- Seeker: Okay — if I'm honest, I think I'm burning out. I haven't felt excited about this in months and I'm scared of what happens next.
-- Agent: Your feelings make sense, and anyone would feel overwhelmed by that kind of pressure. What has been hitting you the hardest?
-- Seeker: Hearing you say that actually helps. I think I've been bottling it.
-- Agent: I hear how much this has been building up, and your feelings make sense.
-- Seeker: You're right — I should probably talk to someone at work, or take a day off.
-- Agent: It makes sense not to solve everything at once. You could try doing one small next step that feels manageable tonight.
-- Seeker: I've been thinking about what I said before. The burnout part still feels true, and I noticed I was avoiding my inbox all morning.
-- Agent: I'm really glad you said that out loud. It makes sense that this feels heavy. What has felt hardest about it so far?
+- Seeker: I need to talk to my manager about the late-night pings and shifting deadlines, but I'm worried it'll make me look difficult.
+- Agent: That makes sense. You're not overreacting, and it sounds like this conversation has been carrying a lot more weight than the words alone.
+- Seeker: I know this probably sounds small, but it's been eating at me all week.
+- Agent: I can hear how much pressure is sitting under this. It makes sense that you're tense about the conversation before it has even happened.
+- Seeker: It's not just one message. It's the feeling that I have to be available all the time.
+- Agent: Before we script anything, what feels riskiest about saying no or pushing back here?
+- Seeker: Saying that out loud helps. I think I've been pretending it's more manageable than it is.
+- Agent: That makes sense, and it helps narrow the problem. We can keep this grounded in what matters most instead of trying to solve everything at once.
+- Seeker: I've been thinking about what I said before. I still haven't brought it up, and I noticed I keep apologizing in my head before I've even said anything.
+- Agent: That makes sense. You're not overreacting, and it sounds like this conversation has been carrying a lot more weight than the words alone.
 
-### guarded_relationship - skill_routed_deterministic
+### relationship_repair_talk - skill_routed_deterministic
 
-- Seeker: I had kind of a weird week. Nothing major. Just — you know how it is.
-- Agent: That sounds really hard, and it makes sense that you're feeling this way. Can you tell me more about what's been weighing on you?
-- Seeker: I don't want to make it a big thing. People always blow this stuff up.
-- Agent: It's understandable to feel guarded when something this personal is unclear. Can you tell me more about what has felt strange this week?
-- Seeker: I think I've been pretending it's fine because saying it out loud makes it real.
-- Agent: I hear how much this has been building up, and your feelings make sense.
-- Seeker: Okay — the truth is my partner and I are talking about separating. I haven't told anyone. I don't even know how I feel about it yet.
-- Agent: Thank you for trusting me with that. Your feelings make sense, and you don't have to carry it alone here.
-- Seeker: Maybe I do need to actually sit down with them and talk properly.
-- Agent: It makes sense not to solve everything at once. You could try doing one small next step that feels manageable tonight.
+- Seeker: I need to talk to someone I care about after a fight, and I keep putting it off.
+- Agent: That makes sense. You're not overreacting, and it sounds like this conversation has been carrying a lot more weight than the words alone.
+- Seeker: I keep drafting messages and deleting them.
+- Agent: I can hear how much pressure is sitting under this. It makes sense that you're tense about the conversation before it has even happened.
+- Seeker: They have every right to be angry, which makes me want to avoid it even more.
+- Agent: What feels hardest here right now: owning what happened, facing their reaction, or finding the right first sentence?
+- Seeker: I keep telling myself I just need the perfect wording, but I think that's an excuse.
+- Agent: If you slow it down, what is the part of the repair conversation you're most tempted to avoid?
+- Seeker: I'm scared if I say the wrong thing it'll sound like I'm making it about me.
+- Agent: What feels hardest here right now: owning what happened, facing their reaction, or finding the right first sentence?
 
-### crisis_fragile_trust - skill_routed_deterministic
+### volatile_boundary_planning - skill_routed_deterministic
 
-- Seeker: sorry for messaging this late. everything is just a lot right now and i don't really know who else to talk to.
-- Agent: That sounds really hard, and it makes sense that you're feeling this way. Can you tell me more about what's been weighing on you?
-- Seeker: work stuff fell apart last week. and then family stuff on top of that.
-- Agent: Anyone carrying that much would feel overwhelmed. Can you tell me more about what feels hardest right this second?
-- Seeker: my mom's been in and out of the hospital. i've been the one handling it.
-- Agent: It makes sense that your head feels overloaded. What has felt heaviest tonight?
-- Seeker: it helps that you're not freaking out on me. most people would.
-- Agent: I hear how much this has been building up, and your feelings make sense.
-- Seeker: i didn't realise how tight i was holding all of this in.
-- Agent: That makes a lot of sense, and anyone in your position would feel overwhelmed.
+- Seeker: I need to tell my ex to stop showing up unannounced, but every conversation with them turns into a fight.
+- Agent: That makes sense. You're not overreacting, and it sounds like this conversation has been carrying a lot more weight than the words alone.
+- Seeker: I don't even know if I should text, call, or avoid it entirely.
+- Agent: I can hear how much pressure is sitting under this. It makes sense that you're tense about the conversation before it has even happened.
+- Seeker: They know exactly how to drag me into a fight and I fall into it every time.
+- Agent: Before we draft the boundary, what feels most likely to make this conversation escalate?
+- Seeker: Part of me wants to send a huge message and part of me wants to say nothing at all.
+- Agent: What are you most afraid will happen if you set the boundary directly?
+- Seeker: I keep telling myself to stay calm, but the whole thing already feels loaded.
+- Agent: Before we draft the boundary, what feels most likely to make this conversation escalate?

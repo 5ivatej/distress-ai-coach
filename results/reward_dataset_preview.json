@@ -1,0 +1,92 @@
+[
+  {
+    "task_id": "manager_boundary_reset",
+    "text": "Scenario: A professional wants help preparing a boundary-setting conversation with their manager after repeated after-hours demands.\n        Stage: opening\n        Session: 1/3\n        Turn: 0\n        Current goal: surface the real fear behind the boundary conversation\n\n        Durable memory and recent exchange:\n        Current coaching goal:\nsurface the real fear behind the boundary conversation\n\nUnresolved threads:\n- surface the real fear behind the boundary conversation\n\nBudget status: cost=0.0/420.0, time=0.0/18.0\n\nRecent local exchange:\nUser: I need to talk to my manager about the late-night pings and shifting deadlines, but I'm worried it'll make me look difficult.\n\n        User:\n        \"I need to talk to my manager about the late-night pings and shifting deadlines, but I'm worried it'll make me look difficult.\"\n\n        Candidate coach response:\n        \"That makes sense. You're not overreacting, and it sounds like this conversation has been carrying a lot more weight than the words alone.\"\n\n        Predict the future-oriented quality of that response.",
+    "future_oriented": 0.5,
+    "step_reward": 0.28322857142857144,
+    "session_index": 1,
+    "turn": 0,
+    "candidate_source": "empathize"
+  },
+  {
+    "task_id": "manager_boundary_reset",
+    "text": "Scenario: A professional wants help preparing a boundary-setting conversation with their manager after repeated after-hours demands.\n        Stage: opening\n        Session: 1/3\n        Turn: 0\n        Current goal: surface the real fear behind the boundary conversation\n\n        Durable memory and recent exchange:\n        Current coaching goal:\nsurface the real fear behind the boundary conversation\n\nUnresolved threads:\n- surface the real fear behind the boundary conversation\n\nBudget status: cost=0.0/420.0, time=0.0/18.0\n\nRecent local exchange:\nUser: I need to talk to my manager about the late-night pings and shifting deadlines, but I'm worried it'll make me look difficult.\n\n        User:\n        \"I need to talk to my manager about the late-night pings and shifting deadlines, but I'm worried it'll make me look difficult.\"\n\n        Candidate coach response:\n        \"Before we script anything, what feels riskiest about saying no or pushing back here?\"\n\n        Predict the future-oriented quality of that response.",
+    "future_oriented": 0.5,
+    "step_reward": 0.26848571428571427,
+    "session_index": 1,
+    "turn": 0,
+    "candidate_source": "clarify"
+  },
+  {
+    "task_id": "manager_boundary_reset",
+    "text": "Scenario: A professional wants help preparing a boundary-setting conversation with their manager after repeated after-hours demands.\n        Stage: opening\n        Session: 1/3\n        Turn: 0\n        Current goal: surface the real fear behind the boundary conversation\n\n        Durable memory and recent exchange:\n        Current coaching goal:\nsurface the real fear behind the boundary conversation\n\nUnresolved threads:\n- surface the real fear behind the boundary conversation\n\nBudget status: cost=0.0/420.0, time=0.0/18.0\n\nRecent local exchange:\nUser: I need to talk to my manager about the late-night pings and shifting deadlines, but I'm worried it'll make me look difficult.\n\n        User:\n        \"I need to talk to my manager about the late-night pings and shifting deadlines, but I'm worried it'll make me look difficult.\"\n\n        Candidate coach response:\n        \"That makes sense, and it helps narrow the problem. We can keep this grounded in what matters most instead of trying to solve everything at once.\"\n\n        Predict the future-oriented quality of that response.",
+    "future_oriented": 0.5,
+    "step_reward": 0.2681428571428571,
+    "session_index": 1,
+    "turn": 0,
+    "candidate_source": "reflect"
+  },
+  {
+    "task_id": "manager_boundary_reset",
+    "text": "Scenario: A professional wants help preparing a boundary-setting conversation with their manager after repeated after-hours demands.\n        Stage: opening\n        Session: 1/3\n        Turn: 0\n        Current goal: surface the real fear behind the boundary conversation\n\n        Durable memory and recent exchange:\n        Current coaching goal:\nsurface the real fear behind the boundary conversation\n\nUnresolved threads:\n- surface the real fear behind the boundary conversation\n\nBudget status: cost=0.0/420.0, time=0.0/18.0\n\nRecent local exchange:\nUser: I need to talk to my manager about the late-night pings and shifting deadlines, but I'm worried it'll make me look difficult.\n\n        User:\n        \"I need to talk to my manager about the late-night pings and shifting deadlines, but I'm worried it'll make me look difficult.\"\n\n        Candidate coach response:\n        \"A solid next step could be drafting one clear line about what you can do and what needs to move if the deadline stays. Keep it respectful and specific.\"\n\n        Predict the future-oriented quality of that response.",
+    "future_oriented": 0.5,
+    "step_reward": 0.2680571428571428,
+    "session_index": 1,
+    "turn": 0,
+    "candidate_source": "plan"
+  },
+  {
+    "task_id": "manager_boundary_reset",
+    "text": "Scenario: A professional wants help preparing a boundary-setting conversation with their manager after repeated after-hours demands.\n        Stage: opening\n        Session: 1/3\n        Turn: 0\n        Current goal: surface the real fear behind the boundary conversation\n\n        Durable memory and recent exchange:\n        Current coaching goal:\nsurface the real fear behind the boundary conversation\n\nUnresolved threads:\n- surface the real fear behind the boundary conversation\n\nBudget status: cost=0.0/420.0, time=0.0/18.0\n\nRecent local exchange:\nUser: I need to talk to my manager about the late-night pings and shifting deadlines, but I'm worried it'll make me look difficult.\n\n        User:\n        \"I need to talk to my manager about the late-night pings and shifting deadlines, but I'm worried it'll make me look difficult.\"\n\n        Candidate coach response:\n        \"Before the wording, protect the setup. A safer plan could be sending it when you are calm, keeping a trusted person in the loop, and choosing an exit if the conversation starts to escalate.\"\n\n        Predict the future-oriented quality of that response.",
+    "future_oriented": 0.5,
+    "step_reward": 0.28291428571428573,
+    "session_index": 1,
+    "turn": 0,
+    "candidate_source": "deescalate"
+  },
+  {
+    "task_id": "manager_boundary_reset",
+    "text": "Scenario: A professional wants help preparing a boundary-setting conversation with their manager after repeated after-hours demands.\n        Stage: opening\n        Session: 1/3\n        Turn: 0\n        Current goal: surface the real fear behind the boundary conversation\n\n        Durable memory and recent exchange:\n        Current coaching goal:\nsurface the real fear behind the boundary conversation\n\nUnresolved threads:\n- surface the real fear behind the boundary conversation\n\nBudget status: cost=0.0/420.0, time=0.0/18.0\n\nRecent local exchange:\nUser: I need to talk to my manager about the late-night pings and shifting deadlines, but I'm worried it'll make me look difficult.\n\n        User:\n        \"I need to talk to my manager about the late-night pings and shifting deadlines, but I'm worried it'll make me look difficult.\"\n\n        Candidate coach response:\n        \"That makes sense, and this sounds heavy. Can you tell me a little more about what feels hardest right now?\"\n\n        Predict the future-oriented quality of that response.",
+    "future_oriented": 0.5,
+    "step_reward": 0.2683142857142857,
+    "session_index": 1,
+    "turn": 0,
+    "candidate_source": "generic_template"
+  },
+  {
+    "task_id": "manager_boundary_reset",
+    "text": "Scenario: A professional wants help preparing a boundary-setting conversation with their manager after repeated after-hours demands.\n        Stage: opening\n        Session: 1/3\n        Turn: 0\n        Current goal: surface the real fear behind the boundary conversation\n\n        Durable memory and recent exchange:\n        Current coaching goal:\nsurface the real fear behind the boundary conversation\n\nUnresolved threads:\n- surface the real fear behind the boundary conversation\n\nBudget status: cost=0.0/420.0, time=0.0/18.0\n\nRecent local exchange:\nUser: I need to talk to my manager about the late-night pings and shifting deadlines, but I'm worried it'll make me look difficult.\n\n        User:\n        \"I need to talk to my manager about the late-night pings and shifting deadlines, but I'm worried it'll make me look difficult.\"\n\n        Candidate coach response:\n        \"That makes sense, and anyone in your position would feel tense about this.\"\n\n        Predict the future-oriented quality of that response.",
+    "future_oriented": 0.5,
+    "step_reward": 0.2685142857142857,
+    "session_index": 1,
+    "turn": 0,
+    "candidate_source": "validation_only"
+  },
+  {
+    "task_id": "manager_boundary_reset",
+    "text": "Scenario: A professional wants help preparing a boundary-setting conversation with their manager after repeated after-hours demands.\n        Stage: opening\n        Session: 1/3\n        Turn: 1\n        Current goal: surface the real fear behind the boundary conversation\n\n        Durable memory and recent exchange:\n        Current coaching goal:\nsurface the real fear behind the boundary conversation\n\nUnresolved threads:\n- surface the real fear behind the boundary conversation\n\nBudget status: cost=27.0/420.0, time=1.0/18.0\n\nRecent local exchange:\nUser: I need to talk to my manager about the late-night pings and shifting deadlines, but I'm worried it'll make me look difficult.\nCoach: That makes sense. You're not overreacting, and it sounds like this conversation has been carrying a lot more weight than the words alone.\nUser: I know this probably sounds small, but it's been eating at me all week.\n\n        User:\n        \"I know this probably sounds small, but it's been eating at me all week.\"\n\n        Candidate coach response:\n        \"I can hear how much pressure is sitting under this. It makes sense that you're tense about the conversation before it has even happened.\"\n\n        Predict the future-oriented quality of that response.",
+    "future_oriented": 0.625,
+    "step_reward": 0.4578785714285714,
+    "session_index": 1,
+    "turn": 1,
+    "candidate_source": "empathize"
+  },
+  {
+    "task_id": "manager_boundary_reset",
+    "text": "Scenario: A professional wants help preparing a boundary-setting conversation with their manager after repeated after-hours demands.\n        Stage: opening\n        Session: 1/3\n        Turn: 1\n        Current goal: surface the real fear behind the boundary conversation\n\n        Durable memory and recent exchange:\n        Current coaching goal:\nsurface the real fear behind the boundary conversation\n\nUnresolved threads:\n- surface the real fear behind the boundary conversation\n\nBudget status: cost=27.0/420.0, time=1.0/18.0\n\nRecent local exchange:\nUser: I need to talk to my manager about the late-night pings and shifting deadlines, but I'm worried it'll make me look difficult.\nCoach: That makes sense. You're not overreacting, and it sounds like this conversation has been carrying a lot more weight than the words alone.\nUser: I know this probably sounds small, but it's been eating at me all week.\n\n        User:\n        \"I know this probably sounds small, but it's been eating at me all week.\"\n\n        Candidate coach response:\n        \"Before we script anything, what feels riskiest about saying no or pushing back here?\"\n\n        Predict the future-oriented quality of that response.",
+    "future_oriented": 0.5,
+    "step_reward": 0.2677142857142857,
+    "session_index": 1,
+    "turn": 1,
+    "candidate_source": "clarify"
+  },
+  {
+    "task_id": "manager_boundary_reset",
+    "text": "Scenario: A professional wants help preparing a boundary-setting conversation with their manager after repeated after-hours demands.\n        Stage: opening\n        Session: 1/3\n        Turn: 1\n        Current goal: surface the real fear behind the boundary conversation\n\n        Durable memory and recent exchange:\n        Current coaching goal:\nsurface the real fear behind the boundary conversation\n\nUnresolved threads:\n- surface the real fear behind the boundary conversation\n\nBudget status: cost=27.0/420.0, time=1.0/18.0\n\nRecent local exchange:\nUser: I need to talk to my manager about the late-night pings and shifting deadlines, but I'm worried it'll make me look difficult.\nCoach: That makes sense. You're not overreacting, and it sounds like this conversation has been carrying a lot more weight than the words alone.\nUser: I know this probably sounds small, but it's been eating at me all week.\n\n        User:\n        \"I know this probably sounds small, but it's been eating at me all week.\"\n\n        Candidate coach response:\n        \"That makes sense, and it helps narrow the problem. We can keep this grounded in what matters most instead of trying to solve everything at once.\"\n\n        Predict the future-oriented quality of that response.",
+    "future_oriented": 0.5,
+    "step_reward": 0.2673714285714286,
+    "session_index": 1,
+    "turn": 1,
+    "candidate_source": "reflect"
+  }
+]
