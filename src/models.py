@@ -7,15 +7,15 @@ from pydantic import BaseModel, Field
 
 
 class Action(BaseModel):
-    """Agent action: a free-text conversational reply to the seeker."""
+    """Agent action: a free-text coaching reply to the user."""
 
-    message: str = Field(..., description="Agent's reply to the seeker.")
+    message: str = Field(..., description="Agent's reply to the user.")
 
 
 class Observation(BaseModel):
     """What the agent sees each turn."""
 
-    seeker_utterance: str = Field(..., description="The seeker's latest message.")
+    seeker_utterance: str = Field(..., description="The user's latest message.")
     turn: int = Field(..., description="1-indexed conversation turn.")
     remaining_turns: int = Field(..., description="Turns left before forced close.")
     stage_hint: str = Field(
@@ -30,7 +30,7 @@ class Observation(BaseModel):
         ...,
         description="One-line scenario framing shown once at reset (kept in obs for convenience).",
     )
-    session_index: int = Field(default=1, description="1-indexed therapy session number.")
+    session_index: int = Field(default=1, description="1-indexed coaching session number.")
     sessions_total: int = Field(default=1, description="Total sessions planned in the current episode.")
     remaining_session_turns: int = Field(
         default=0,
@@ -79,7 +79,7 @@ class Reward(BaseModel):
         ...,
         description=(
             "Future-oriented component: k-step lookahead over the deterministic "
-            "seeker dynamics, comparing this action's projected resolution "
+            "user dynamics, comparing this action's projected resolution "
             "progress against the oracle ceiling (RLFF-ESC style)."
         ),
     )
@@ -134,7 +134,7 @@ class EnvState(BaseModel):
 class ResetRequest(BaseModel):
     task_id: Optional[str] = Field(
         default=None,
-        description="Optional task id. If omitted, defaults to 'work_stress_venting'.",
+        description="Optional task id. If omitted, defaults to 'manager_boundary_reset'.",
     )
     seed: Optional[int] = Field(default=None, description="Optional seed (reserved; env is deterministic).")
 

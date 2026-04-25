@@ -1,4 +1,4 @@
-"""Emotional Support Conversations OpenEnv environment."""
+"""Distress AI Coach OpenEnv environment."""
 from .models import Action, Observation, Reward, StepResult, ResetResult, EnvState
 from .env import ESCEnv
 from .tasks import TASKS, TaskSpec

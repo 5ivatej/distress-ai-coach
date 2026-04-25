@@ -3,9 +3,9 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "emotional-support-conversations"
+name = "distress-ai-coach"
 version = "0.1.0"
-description = "OpenEnv environment for evaluating agents on emotional support conversations."
+description = "OpenEnv environment for training and evaluating AI coaches for difficult conversations."
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [

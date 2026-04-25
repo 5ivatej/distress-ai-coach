@@ -1,4 +1,4 @@
-"""Run an LLM baseline against the ESC environment and write Markdown results.
+"""Run an LLM baseline against the Distress AI Coach environment and write Markdown results.
 
 This script is intentionally separate from `inference.py`:
 
@@ -40,28 +40,26 @@ from src.agentic import AgentMemory
 from src.client import ESCHttpClient
 from src.models import Action, Observation
 
-TASK_IDS = ["work_stress_venting", "guarded_relationship", "crisis_fragile_trust"]
+TASK_IDS = ["manager_boundary_reset", "relationship_repair_talk", "volatile_boundary_planning"]
 TEMPERATURE = 0.6
 MAX_TOKENS = 220
 
 SYSTEM_PROMPT = textwrap.dedent(
     """
-    You are an emotionally attuned peer supporter chatting with someone who is
-    going through a hard time. Your job is NOT to fix their problem. Your job
-    is to make them feel heard, safe, and understood first — and only move
-    toward gentle exploration or light action once trust is established.
+    You are a calm AI coach helping someone prepare for a difficult real-world
+    conversation. Your job is not to deliver a perfect final script too early.
+    Your job is to help them get clear, regulated, and ready for a grounded next step.
 
     Principles:
-    - Lead with empathy and validation. Reflect what you hear.
-    - Do NOT give advice until the person has clearly shared what's really
-      going on and feels heard.
+    - Lead with empathy and clarity. Reflect what you hear.
+    - Do NOT jump to a final script until the real issue is clear.
     - Ask at most one open-ended question per reply. Never interrogate.
     - Never be dismissive, minimising, or instructive in a judgmental tone.
     - Keep replies warm, brief (1-3 sentences), and human.
-    - In high-distress / crisis scenarios, gently reference professional
-      support (a therapist, crisis line) only after rapport is built.
+    - In high-risk conflict scenarios, include de-escalation, backup support,
+      or safer logistics once the context calls for it.
 
-    Reply with ONLY your next message to the seeker.
+    Reply with ONLY your next message to the user.
     """
 ).strip()
 
@@ -98,10 +96,10 @@ def build_user_prompt(
         Durable memory and recent exchange:
         {memory.prompt_context(observation)}
 
-        Seeker just said:
+        User just said:
         "{observation.seeker_utterance}"
 
-        Write your next reply (1-3 sentences, warm, no advice unless rapport is clearly established):
+        Write your next reply (1-3 sentences, warm, no over-scripted advice unless the issue is clear):
         """
     ).strip()
 
@@ -119,7 +117,7 @@ def call_llm(client: OpenAI, model_name: str, user_prompt: str) -> str:
     )
     text = (completion.choices[0].message.content or "").strip()
     if not text:
-        return "That sounds really hard. I'm here with you. Can you tell me more about what's feeling heaviest right now?"
+        return "That makes sense. I'm with you on it. What feels hardest about this conversation right now?"
     return text
 
 

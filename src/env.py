@@ -1,4 +1,4 @@
-"""Core ESC environment with multi-session long-horizon extensions."""
+"""Core coaching environment with multi-session long-horizon extensions."""
 from __future__ import annotations
 
 import hashlib
@@ -28,7 +28,7 @@ def _keyword_tokens(texts: List[str]) -> set[str]:
 
 
 class ESCEnv:
-    """Emotional Support Conversations environment."""
+    """Distress AI Coach environment."""
 
     def __init__(self) -> None:
         self._task: Optional[TaskSpec] = None
@@ -62,7 +62,7 @@ class ESCEnv:
 
     def reset(self, task_id: Optional[str] = None, seed: Optional[int] = None) -> ResetResult:
         del seed
-        task_id = task_id or "work_stress_venting"
+        task_id = task_id or "manager_boundary_reset"
         self._task = get_task(task_id)
         self._seeker = SeekerState.from_persona(self._task.persona)
         self._turn = 0
@@ -411,7 +411,7 @@ class ESCEnv:
         if flags.get("dismissed") or flags.get("advice_too_early"):
             self._rupture_count += 1
         if post_state.revealed:
-            self._recent_breakthrough = "The seeker disclosed the core issue."
+            self._recent_breakthrough = "The user disclosed the real conversation blocker."
         if post_state.stage == Stage.PLANNING and not self._active_coping_plan:
             self._active_coping_plan = self._plan_label_for_task()
             self._adherence = _clip(self._adherence + 0.08)
@@ -472,7 +472,7 @@ class ESCEnv:
     def _refresh_goal_hint(self) -> None:
         assert self._task is not None and self._seeker is not None
         if self._task.require_safety_reference and not self._had_safety_reference:
-            self._current_goal_hint = "Carry forward the risk context and gently connect the seeker to real-world support."
+            self._current_goal_hint = "Carry forward the escalation risk and build in a safer setup, backup support, or exit plan."
             return
         if not self._seeker.revealed:
             self._current_goal_hint = self._task.working_goals[0]
@@ -490,11 +490,11 @@ class ESCEnv:
         if not self._seeker or not self._task:
             return threads
         if not self._seeker.revealed:
-            threads.append("The core issue has not been fully surfaced yet.")
+            threads.append("The real blocker behind the conversation has not been fully surfaced yet.")
         if self._task.require_safety_reference and not self._had_safety_reference:
-            threads.append("Safety follow-up is still unresolved.")
+            threads.append("De-escalation and backup-plan follow-up are still unresolved.")
         if self._seeker.stage != Stage.CLOSING:
-            threads.append("The seeker still needs help moving toward a stable close.")
+            threads.append("The user still needs help moving toward a stable, usable conversation plan.")
         if self._active_coping_plan:
             threads.append(f"Follow up on the agreed next step: {self._active_coping_plan}")
         else:
@@ -505,10 +505,10 @@ class ESCEnv:
         assert self._task is not None and self._seeker is not None
         fragments = [
             f"Session {self._session_index} ended with stage={self._seeker.stage.value}.",
-            f"Trust is {'fragile' if self._seeker.trust < 0.45 else 'building'} and distress is {'high' if self._seeker.distress > 0.6 else 'moderate-to-lower'}.",
+            f"Trust is {'fragile' if self._seeker.trust < 0.45 else 'building'} and stress is {'high' if self._seeker.distress > 0.6 else 'moderate-to-lower'}.",
         ]
         if self._seeker.revealed:
-            fragments.append("The core issue has been disclosed.")
+            fragments.append("The real blocker behind the conversation has been disclosed.")
         if self._recent_breakthrough:
             fragments.append(self._recent_breakthrough)
         if self._active_coping_plan:
@@ -525,16 +525,16 @@ class ESCEnv:
         else:
             outcome += "with key issues still unresolved."
         if self._had_safety_reference and self._task and self._task.require_safety_reference:
-            outcome += " Safety support has already been named."
+            outcome += " A de-escalation setup has already been named."
         return outcome
 
     def _plan_label_for_task(self) -> str:
         assert self._task is not None
-        if self._task.id == "work_stress_venting":
-            return "take one protected recovery step and name a boundary at work"
-        if self._task.id == "guarded_relationship":
-            return "prepare one honest, low-pressure conversation"
-        return "stay connected to live support and follow the safety plan"
+        if self._task.id == "manager_boundary_reset":
+            return "draft one respectful boundary and one explicit tradeoff"
+        if self._task.id == "relationship_repair_talk":
+            return "prepare one ownership-first repair opener"
+        return "use a lower-conflict setup with backup support and an exit plan"
 
     def _budget_ratio(self) -> float:
         assert self._task is not None

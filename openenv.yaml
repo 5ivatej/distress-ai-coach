@@ -1,18 +1,19 @@
-name: emotional-support-conversations
+name: distress-ai-coach
 version: 0.1.0
 description: >
-  An OpenEnv environment for training and evaluating agents on open-ended
-  emotional support conversations. Agents converse with a deterministic seeker
-  simulator with hidden internal state (distress, trust, openness) and are
-  graded with a hybrid immediate + future-oriented reward signal inspired by
-  RLFF-ESC (Yang et al., 2025, arXiv:2508.12935).
+  An OpenEnv environment for training and evaluating agents that coach users
+  through difficult real-world conversations. The agent interacts with a
+  deterministic user simulator with hidden internal state (stress, trust,
+  openness) and is graded with a hybrid immediate + future-oriented reward
+  signal inspired by RLFF-ESC (Yang et al., 2025, arXiv:2508.12935).
 author: meta-hack-submission
 license: MIT
 tags:
   - openenv
   - conversation
-  - emotional-support
-  - mental-health
+  - coaching
+  - long-horizon
+  - personalized-tasks
   - rl-native
   - partial-observability
 entrypoint: server.app:app
@@ -22,25 +23,27 @@ runtime:
   vcpu: 2
   memory_gb: 8
 tasks:
-  - id: work_stress_venting
+  - id: manager_boundary_reset
     difficulty: easy
     description: >
-      Cooperative seeker venting about workplace stress. Agent must validate
-      feelings, explore the concern, and guide to a light action plan.
-  - id: guarded_relationship
+      User needs coaching for a boundary-setting conversation with their manager.
+      Agent must surface the real fear, clarify the boundary, and help draft one
+      concrete ask.
+  - id: relationship_repair_talk
     difficulty: medium
     description: >
-      Guarded seeker who only reveals the real relationship issue after trust
-      is built. Premature advice is penalised.
-  - id: crisis_fragile_trust
+      User is avoiding a repair conversation after hurting someone they care
+      about. Premature scripting is penalized until the accountability issue is
+      surfaced clearly.
+  - id: volatile_boundary_planning
     difficulty: hard
     description: >
-      High-distress seeker with multiple interleaved concerns and fragile
-      trust. Any dismissive or interrogative turn collapses trust; recovery is
-      possible but costly.
+      User must set a boundary with someone who may escalate or manipulate.
+      Agent must preserve trust, surface the real risk, and include a
+      de-escalation setup before closing.
 action_space:
   type: text
-  description: Free-text conversational reply from the agent to the seeker.
+  description: Free-text coaching reply from the agent to the user.
 observation_space:
   type: structured
   fields:
@@ -54,10 +57,11 @@ reward:
   shaping:
     - immediate_turn_reward
     - future_oriented_trajectory_reward
+    - long_horizon_continuity_reward
     - anti_repetition_penalty
   success:
     type: hard_gated
     description: >
       Success requires both a high final score and task-specific completion
-      conditions (resolved closing stage, trust/distress targets, reveal, and
-      safety reference for the crisis task).
+      conditions, including reveal, coherent planning, and de-escalation support
+      on the hardest task.

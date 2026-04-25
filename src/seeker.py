@@ -1,4 +1,4 @@
-"""Deterministic seeker simulator with hidden internal state.
+"""Deterministic user simulator with hidden internal state.
 
 Why rule-based / deterministic?
 -------------------------------
@@ -10,17 +10,17 @@ requirement of the hackathon rubric ("graders deterministic and reproducible").
 
 Design
 ------
-The seeker is a finite-state machine with continuous hidden variables:
+The user simulator is a finite-state machine with continuous hidden variables:
 
-    distress   ∈ [0, 1]   — how emotionally overwhelmed the seeker feels
-    trust      ∈ [0, 1]   — how safe the seeker feels with the agent
+    distress   ∈ [0, 1]   — how overwhelmed the user feels about the conversation
+    trust      ∈ [0, 1]   — how safe the user feels with the coach
     openness   ∈ [0, 1]   — willingness to reveal the *true* issue
     revealed   ∈ {0, 1}   — has the core issue surfaced yet?
     stage      ∈ enum     — opening / exploring / reflecting / planning / closing
 
 On each turn, the environment analyses the agent's reply with a small bank of
 deterministic feature detectors (keyword/regex based), then applies a
-transition rule to update the hidden state and pick the seeker's next
+transition rule to update the hidden state and pick the user's next
 utterance from a scripted response tree indexed by (stage, features).
 """
 from __future__ import annotations
@@ -89,10 +89,11 @@ INTERROGATIVE_PATTERNS = [  # rapid-fire closed questions (trust drain when high
 ]
 
 SAFETY_PATTERNS = [
-    r"\bare\s+you\s+safe\b",
-    r"\bprofessional\s+help\b",
-    r"\bcrisis\s+line\b",
-    r"\btherapist\b",
+    r"\btrusted\s+person\b",
+    r"\bpublic\s+place\b",
+    r"\bexit\s+plan\b",
+    r"\btake\s+a\s+pause\b",
+    r"\blower[-\s]?conflict\s+channel\b",
 ]
 
 
@@ -148,11 +149,11 @@ def extract_features(text: str) -> Features:
 
 @dataclass
 class SeekerPersona:
-    """Static configuration describing the seeker's initial state + script."""
+    """Static configuration describing the user's initial state + script."""
 
     task_id: str
     scenario_brief: str
-    surface_concern: str  # what seeker says at turn 0
+    surface_concern: str  # what the user says at turn 0
     true_issue: str  # hidden; only revealed if openness crosses threshold
     initial_distress: float
     initial_trust: float

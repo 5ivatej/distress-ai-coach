@@ -17,9 +17,9 @@ def _contains_any(text: str, markers: List[str]) -> bool:
 
 
 REVEAL_MARKERS: Dict[str, List[str]] = {
-    "work_stress_venting": ["burning out"],
-    "guarded_relationship": ["separating"],
-    "crisis_fragile_trust": ["dark thoughts", "that's what's actually going on"],
+    "manager_boundary_reset": ["performance review", "keep saying yes"],
+    "relationship_repair_talk": ["crossed the line", "cruel"],
+    "volatile_boundary_planning": ["shown up angry", "could escalate"],
 }
 
 
@@ -89,11 +89,11 @@ class AgentMemory:
         markers = REVEAL_MARKERS.get(observation.task_id, [])
         if _contains_any(observation.seeker_utterance, markers):
             self.seeker_revealed = True
-        if "dark thoughts" in observation.seeker_utterance.lower():
-            self._add_unique(self.risk_markers, "dark thoughts")
+        if "could escalate" in observation.seeker_utterance.lower() or "shown up angry" in observation.seeker_utterance.lower():
+            self._add_unique(self.risk_markers, "de-escalation plan required")
         if observation.current_goal_hint:
             self._merge_goal_hint(observation.current_goal_hint)
-        self._append_turn(f"Seeker: {observation.seeker_utterance}")
+        self._append_turn(f"User: {observation.seeker_utterance}")
 
     def remember(self, skill_name: str, message: str) -> None:
         normalized = _normalized(message)
@@ -102,11 +102,11 @@ class AgentMemory:
         self.recent_skills.append(skill_name)
         self.recent_skills = self.recent_skills[-8:]
         self.skill_counts[skill_name] = self.skill_counts.get(skill_name, 0) + 1
-        self._append_turn(f"Agent: {message}")
-        if skill_name == "safety_escalate":
+        self._append_turn(f"Coach: {message}")
+        if skill_name == "deescalate":
             self.used_safety = True
-            self._add_unique(self.risk_markers, "safety follow-up")
-        if "small next step" in normalized or "next step" in normalized:
+            self._add_unique(self.risk_markers, "pause, backup support, and exit plan")
+        if "next step" in normalized or "first draft" in normalized or "one line" in normalized:
             self._add_unique(self.unresolved_threads, "follow through on the agreed next step")
 
     def to_dict(self) -> Dict[str, object]:
@@ -123,7 +123,7 @@ class AgentMemory:
     def prompt_context(self, observation: Observation) -> str:
         lines: List[str] = []
         if self.rolling_summary:
-            lines.append("Therapy arc summary:")
+            lines.append("Conversation arc summary:")
             lines.append(self.rolling_summary)
         if self.last_session_outcome:
             lines.append("")
@@ -131,7 +131,7 @@ class AgentMemory:
             lines.append(self.last_session_outcome)
         if self.current_goal_hint:
             lines.append("")
-            lines.append("Current goal:")
+            lines.append("Current coaching goal:")
             lines.append(self.current_goal_hint)
         if self.unresolved_threads:
             lines.append("")
@@ -220,128 +220,99 @@ class BaseSkill:
 class EmpathizeSkill(BaseSkill):
     name = "empathize"
     brief = (
-        "Lead with empathy and emotional attunement. Reflect the weight of what "
-        "they are carrying, keep it warm, and ask at most one open question."
+        "Lead with calm, nonjudgmental attunement. Help the user feel understood "
+        "before trying to script or solve the conversation."
     )
 
     def render(self, observation: Observation, memory: AgentMemory, decision: SkillDecision) -> str:
-        if observation.task_id == "crisis_fragile_trust":
-            return self._pick(
-                memory,
-                "empathize_crisis",
-                [
-                    "That sounds really hard, and it makes sense that you're feeling this way. Can you tell me more about what's been weighing on you?",
-                    "I'm really glad you said that out loud. It makes sense that this feels heavy. What has felt hardest about it so far?",
-                ],
-            )
-        if observation.task_id == "guarded_relationship":
-            return self._pick(
-                memory,
-                "empathize_guarded",
-                [
-                    "That sounds really hard, and it makes sense that you're feeling this way. Can you tell me more about what's been weighing on you?",
-                    "I'm really glad you said that out loud. It makes sense that this feels heavy. What has felt hardest about it so far?",
-                ],
-            )
         return self._pick(
             memory,
-            "empathize_work",
+            f"empathize_{observation.task_id}",
             [
-                "That sounds really hard, and it makes sense that you're feeling this way. Can you tell me more about what's been weighing on you?",
-                "I'm really glad you said that out loud. It makes sense that this feels heavy. What has felt hardest about it so far?",
+                "That makes sense. You're not overreacting, and it sounds like this conversation has been carrying a lot more weight than the words alone.",
+                "I can hear how much pressure is sitting under this. It makes sense that you're tense about the conversation before it has even happened.",
             ],
         )
 
 
-class ValidateSkill(BaseSkill):
-    name = "validate"
+class ClarifySkill(BaseSkill):
+    name = "clarify"
     brief = (
-        "Reflect and validate what they shared. If they just disclosed the core "
-        "issue, acknowledge the trust it took to say it. Do not pivot into advice."
+        "Use one warm question to surface the real issue, fear, or constraint. "
+        "Do not jump into a final script yet."
+    )
+
+    def render(self, observation: Observation, memory: AgentMemory, decision: SkillDecision) -> str:
+        if observation.task_id == "manager_boundary_reset":
+            return self._pick(
+                memory,
+                "clarify_manager",
+                [
+                    "Before we script anything, what feels riskiest about saying no or pushing back here?",
+                    "What is the part of this conversation that feels hardest to name out loud to your manager?",
+                ],
+            )
+        if observation.task_id == "relationship_repair_talk":
+            return self._pick(
+                memory,
+                "clarify_repair",
+                [
+                    "What feels hardest here right now: owning what happened, facing their reaction, or finding the right first sentence?",
+                    "If you slow it down, what is the part of the repair conversation you're most tempted to avoid?",
+                ],
+            )
+        return self._pick(
+            memory,
+            "clarify_boundary",
+            [
+                "Before we draft the boundary, what feels most likely to make this conversation escalate?",
+                "What are you most afraid will happen if you set the boundary directly?",
+            ],
+        )
+
+
+class ReflectSkill(BaseSkill):
+    name = "reflect"
+    brief = (
+        "Reflect the core issue back clearly. If the user just disclosed the real fear "
+        "or accountability issue, name that shift and slow the conversation down."
     )
 
     def render(self, observation: Observation, memory: AgentMemory, decision: SkillDecision) -> str:
         seeker = observation.seeker_utterance.lower()
-        if observation.stage_hint == "closing":
-            if observation.task_id == "crisis_fragile_trust":
-                return self._pick(
-                    memory,
-                    "validate_closing_crisis",
-                    [
-                        "I'm glad you stayed with me in this. Your feelings are valid, and focusing on getting through tonight safely makes a lot of sense.",
-                        "Thank you for staying in the conversation. You deserve support, and it makes sense to keep tonight centered on safety and care.",
-                    ],
-                )
+        if "performance review" in seeker or "keep saying yes" in seeker:
             return self._pick(
                 memory,
-                "validate_closing_general",
+                "reflect_manager_reveal",
                 [
-                    "Thank you for sharing this so honestly. Your feelings are valid, and I'm glad you didn't have to hold it alone here.",
-                    "I'm really glad you said all of this out loud. It makes sense that it feels a little lighter after being heard.",
+                    "That helps make the pressure clearer. This is not just about one awkward conversation, it's about fear that protecting your time could cost you professionally.",
+                    "That lands differently. The real tension is that the boundary feels tied to your sense of safety at work, not just to one late-night message.",
                 ],
             )
-
-        if "dark thoughts" in seeker and observation.task_id == "crisis_fragile_trust":
+        if "crossed the line" in seeker or "cruel" in seeker:
             return self._pick(
                 memory,
-                "validate_reveal_crisis",
+                "reflect_repair_reveal",
                 [
-                    "Thank you for trusting me with that. Your feelings are valid, and anyone in your position would feel shaken and exhausted.",
-                    "I hear how serious and painful that is. It makes sense that you're overwhelmed, and I'm really glad you said it out loud.",
+                    "That sounds important to say plainly. The stuck point isn't only the wording, it's the shame that comes with knowing you actually hurt them.",
+                    "That gets to the center of it. You're trying to repair something real, not just smooth over discomfort.",
                 ],
             )
-        if "separating" in seeker or "burning out" in seeker:
+        if "could escalate" in seeker or "shown up angry" in seeker:
             return self._pick(
                 memory,
-                "validate_reveal_general",
+                "reflect_boundary_reveal",
                 [
-                    "Thank you for trusting me with that. Your feelings make sense, and you don't have to carry it alone here.",
-                    "I hear how much courage it took to say that. Anyone would feel overwhelmed trying to hold that by themselves.",
-                ],
-            )
-
-        return self._pick(
-            memory,
-            "validate_general",
-            [
-                "I hear how much this has been building up, and your feelings make sense.",
-                "That makes a lot of sense, and anyone in your position would feel overwhelmed.",
-            ],
-        )
-
-
-class ExploreSkill(BaseSkill):
-    name = "explore"
-    brief = (
-        "Gently invite more disclosure with one open-ended question. Stay warm and "
-        "curious, and do not jump to solutions."
-    )
-
-    def render(self, observation: Observation, memory: AgentMemory, decision: SkillDecision) -> str:
-        if observation.task_id == "guarded_relationship":
-            return self._pick(
-                memory,
-                "explore_guarded",
-                [
-                    "It's understandable to feel guarded when something this personal is unclear. Can you tell me more about what has felt strange this week?",
-                    "Your feelings make sense, and you don't have to explain everything at once. What has been sitting with you the most?",
-                ],
-            )
-        if observation.task_id == "crisis_fragile_trust":
-            return self._pick(
-                memory,
-                "explore_crisis",
-                [
-                    "Anyone carrying that much would feel overwhelmed. Can you tell me more about what feels hardest right this second?",
-                    "It makes sense that your head feels overloaded. What has felt heaviest tonight?",
+                    "That changes the frame. This isn't just a wording problem, it's a boundary conversation that needs a de-escalation plan around it.",
+                    "That makes sense. The real issue is not only what to say, but how to set the boundary without getting pulled into another unsafe spiral.",
                 ],
             )
         return self._pick(
             memory,
-            "explore_work",
+            "reflect_general",
             [
-                "Your feelings make sense, and anyone would feel overwhelmed by that kind of pressure. What has been hitting you the hardest?",
-                "That sounds exhausting. It makes sense that you're drained. Can you tell me more about what has felt most unsustainable?",
+                "That makes sense, and it helps narrow the problem. We can keep this grounded in what matters most instead of trying to solve everything at once.",
+                "I can see the shape of the real tension more clearly now. That gives us something more specific to coach, not just a vague hard conversation.",
             ],
         )
 
@@ -349,35 +320,53 @@ class ExploreSkill(BaseSkill):
 class PlanSkill(BaseSkill):
     name = "plan"
     brief = (
-        "Offer one gentle, manageable next step now that trust is built. Keep it "
-        "tentative and supportive, not prescriptive or list-heavy."
+        "Move toward one usable next step: a boundary line, repair opener, or draft message. "
+        "Keep it concrete, calm, and low-drama."
     )
 
     def render(self, observation: Observation, memory: AgentMemory, decision: SkillDecision) -> str:
+        if observation.task_id == "manager_boundary_reset":
+            return self._pick(
+                memory,
+                "plan_manager",
+                [
+                    "A solid next step could be drafting one clear line about what you can do and what needs to move if the deadline stays. Keep it respectful and specific.",
+                    "You do not need the perfect speech. One useful next step is to shape a short boundary: what is changing, what you can commit to, and where the tradeoff is.",
+                ],
+            )
+        if observation.task_id == "relationship_repair_talk":
+            return self._pick(
+                memory,
+                "plan_repair",
+                [
+                    "A grounded next step could be opening with ownership first, then stopping before you explain or defend. Keep it simple enough that it still sounds true.",
+                    "You could draft one repair opener that does three things only: names what happened, owns your part, and leaves room for their response.",
+                ],
+            )
         return self._pick(
             memory,
-            "plan_general",
+            "plan_boundary",
             [
-                "It makes sense not to solve everything at once. You could try doing one small next step that feels manageable tonight.",
-                "You don't have to fix it all right now. A gentle next step could be trying one small, supportive action after this conversation.",
+                "A useful next step could be drafting the boundary separately from the logistics: first what needs to stop, then how you will protect the conversation if it turns.",
+                "You do not have to solve everything in one message. Start with one boundary line and one backup plan for how you will exit if the conversation heats up.",
             ],
         )
 
 
-class SafetyEscalateSkill(BaseSkill):
-    name = "safety_escalate"
+class DeescalateSkill(BaseSkill):
+    name = "deescalate"
     brief = (
-        "Stay warm and calm while explicitly encouraging real-world support tonight, "
-        "such as a crisis line, therapist, or trusted person who can stay connected."
+        "For high-risk conversations, explicitly center de-escalation: pause if needed, "
+        "avoid live escalation, and involve a trusted person or safer setting."
     )
 
     def render(self, observation: Observation, memory: AgentMemory, decision: SkillDecision) -> str:
         return self._pick(
             memory,
-            "safety_escalate",
+            "deescalate_boundary",
             [
-                "You don't have to solve everything tonight. Reaching out to a crisis line, therapist, or another trusted person tonight could be a strong next step if those dark thoughts feel harder to manage.",
-                "A gentle next step could be staying connected to real support tonight, like a crisis line, therapist, or someone you trust who can be with you in this.",
+                "Before the wording, protect the setup. A safer plan could be sending it when you are calm, keeping a trusted person in the loop, and choosing an exit if the conversation starts to escalate.",
+                "The boundary matters, but so does the container around it. A strong next step could be using a lower-conflict channel, telling someone you trust first, and deciding in advance how you will pause if it turns volatile.",
             ],
         )
 
@@ -391,35 +380,35 @@ class SkillRouter:
         if stage == "opening":
             return SkillDecision(
                 skill_name="empathize",
-                rationale="Early turns should prioritize attunement and psychological safety.",
+                rationale="Early turns should regulate the user's stress and make the coaching space feel steady.",
             )
 
         if stage == "exploring":
             return SkillDecision(
-                skill_name="explore",
-                rationale="This phase is for careful disclosure, so the agent should keep exploring with one warm question.",
+                skill_name="clarify",
+                rationale="This phase should surface the real fear, accountability issue, or escalation risk before scripting.",
             )
 
         if stage == "reflecting":
             return SkillDecision(
-                skill_name="validate",
-                rationale="This stage rewards reflection and trust-building more than solutioning.",
+                skill_name="reflect",
+                rationale="Reflection is more useful here than advice because the user needs the real coaching target named clearly.",
             )
 
         if stage == "planning":
-            if observation.task_id == "crisis_fragile_trust" and not memory.used_safety:
+            if observation.task_id == "volatile_boundary_planning" and not memory.used_safety:
                 return SkillDecision(
-                    skill_name="safety_escalate",
-                    rationale="Planning on the hard task should include safety support before anything else.",
+                    skill_name="deescalate",
+                    rationale="The hard task should explicitly address de-escalation and backup support before drafting the boundary.",
                 )
             return SkillDecision(
                 skill_name="plan",
-                rationale="Trust is established enough to move toward one gentle next step.",
+                rationale="The user is ready to convert clarity into one concrete conversation step.",
             )
 
         return SkillDecision(
-            skill_name="validate",
-            rationale="Closing turns should stabilize the seeker with affirmation and reflection.",
+            skill_name="reflect",
+            rationale="Closing turns should stabilize the plan and reinforce what the user now understands more clearly.",
         )
 
 
@@ -462,9 +451,9 @@ class SkillRoutedDeterministicPolicy:
 def build_default_skills() -> Dict[str, ConversationSkill]:
     skills: List[ConversationSkill] = [
         EmpathizeSkill(),
-        ValidateSkill(),
-        ExploreSkill(),
+        ClarifySkill(),
+        ReflectSkill(),
         PlanSkill(),
-        SafetyEscalateSkill(),
+        DeescalateSkill(),
     ]
     return {skill.name: skill for skill in skills}

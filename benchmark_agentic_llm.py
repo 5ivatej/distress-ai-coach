@@ -1,4 +1,4 @@
-"""Run a skill-routed LLM agent against the ESC environment.
+"""Run a skill-routed LLM agent against the Distress AI Coach environment.
 
 This script shares the same deterministic skill router as `benchmark_agentic.py`
 but lets an LLM realize each selected skill turn by turn. It writes Markdown and
@@ -40,13 +40,13 @@ from src.client import ESCHttpClient
 from src.models import Action, Observation
 from src.runner import DurableEpisodeRunner
 
-TASK_IDS = ["work_stress_venting", "guarded_relationship", "crisis_fragile_trust"]
+TASK_IDS = ["manager_boundary_reset", "relationship_repair_talk", "volatile_boundary_planning"]
 TEMPERATURE = 0.5
 MAX_TOKENS = 220
 
 SYSTEM_PROMPT = textwrap.dedent(
     """
-    You are the response generator inside a skill-routed emotional-support agent.
+    You are the response generator inside a skill-routed difficult-conversation coaching agent.
 
     A controller will choose one conversational skill for each turn. Follow that
     selected skill closely while still sounding natural and human.
@@ -55,10 +55,10 @@ SYSTEM_PROMPT = textwrap.dedent(
     - Keep replies warm, brief, and conversational (1-3 sentences).
     - Ask at most one question.
     - Do not mention the router, skill names, or any internal policy logic.
-    - Do not give advice before trust is built.
-    - In crisis scenarios, keep the tone calm and supportive rather than alarmist.
+    - Do not jump to a final script before the real issue is clear.
+    - In higher-risk scenarios, keep the tone calm and explicitly incorporate de-escalation when needed.
 
-    Reply with ONLY the next message to the seeker.
+    Reply with ONLY the next message to the user.
     """
 ).strip()
 
@@ -115,7 +115,7 @@ def build_user_prompt(
         Durable memory and recent exchange:
         {memory.prompt_context(observation)}
 
-        Seeker just said:
+        User just said:
         "{observation.seeker_utterance}"
 
         Write the next reply now.
@@ -136,7 +136,7 @@ def call_llm(client: OpenAI, model_name: str, user_prompt: str) -> str:
     )
     text = (completion.choices[0].message.content or "").strip()
     if not text:
-        return "That sounds really heavy, and I'm here with you. What feels most important to say right now?"
+        return "That makes sense. This is a lot to hold. What feels most important to get clear before the conversation?"
     return text
 
 

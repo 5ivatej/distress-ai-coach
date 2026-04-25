@@ -29,11 +29,11 @@ from src.env import ESCEnv
 from src.models import ResetRequest, StepRequest
 
 app = FastAPI(
-    title="Emotional Support Conversations (OpenEnv)",
+    title="Distress AI Coach (OpenEnv)",
     version="0.1.0",
     description=(
-        "An OpenEnv environment for open-ended emotional support "
-        "conversations. Reward shaping inspired by RLFF-ESC "
+        "An OpenEnv environment for difficult-conversation coaching. "
+        "Reward shaping is inspired by RLFF-ESC "
         "(arXiv:2508.12935)."
     ),
 )
@@ -45,7 +45,7 @@ UI_HTML = """<!doctype html>
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Emotional Support Conversations</title>
+    <title>Distress AI Coach</title>
     <style>
       :root {
         --bg: #f3efe7;
@@ -196,7 +196,7 @@ UI_HTML = """<!doctype html>
   <body>
     <div class="shell">
       <div class="hero">
-        <h1>Emotional Support Conversations</h1>
+        <h1>Distress AI Coach</h1>
         <p class="sub">
           Interactive browser playground for the deterministic OpenEnv benchmark.
           The API stays unchanged; this page just calls <code>/tasks</code>,
@@ -424,7 +424,7 @@ def _get_env_for_request(request: Request) -> ESCEnv:
 
 def _root_payload() -> dict:
     return {
-        "name": "emotional-support-conversations",
+        "name": "distress-ai-coach",
         "version": "0.1.0",
         "endpoints": ["/reset", "/step", "/state", "/tasks", "/ui"],
         "tasks": [t["id"] for t in ESCEnv.list_tasks()],

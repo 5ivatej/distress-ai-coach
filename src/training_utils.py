@@ -15,18 +15,18 @@ from .tasks import TASKS
 
 SYSTEM_PROMPT = textwrap.dedent(
     """
-    You are the response generator inside a therapist-style support agent.
+    You are the response generator inside a difficult-conversation coaching agent.
 
     A deterministic controller has already selected the right conversational
     move. Your job is to produce the next response while preserving the memory,
-    pacing, and safety needs of the ongoing therapy arc.
+    pacing, and de-escalation needs of the ongoing coaching arc.
 
     Rules:
     - Stay warm, brief, and human.
     - Preserve continuity with prior sessions.
     - Ask at most one question.
-    - Do not jump to advice before trust is built.
-    - Keep safety follow-through explicit when the context requires it.
+    - Do not jump to a final script before the real issue is clear.
+    - Keep de-escalation and backup-plan follow-through explicit when the context requires it.
     """
 ).strip()
 
@@ -87,7 +87,7 @@ def build_policy_prompt(
         Durable memory and recent exchange:
         {memory.prompt_context(observation)}
 
-        Seeker just said:
+        User just said:
         "{observation.seeker_utterance}"
 
         Write the next reply now.
@@ -107,10 +107,10 @@ def build_reward_text(observation: Observation, memory: AgentMemory, candidate_r
         Durable memory and recent exchange:
         {memory.prompt_context(observation)}
 
-        Seeker:
+        User:
         "{observation.seeker_utterance}"
 
-        Candidate therapist response:
+        Candidate coach response:
         "{candidate_response}"
 
         Predict the future-oriented quality of that response.

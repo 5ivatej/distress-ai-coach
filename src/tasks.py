@@ -1,4 +1,4 @@
-"""Multi-session task specifications for the ESC benchmark."""
+"""Multi-session task specifications for the Distress AI Coach benchmark."""
 from __future__ import annotations
 
 from dataclasses import dataclass, field
@@ -27,208 +27,204 @@ class TaskSpec:
     session_openers: List[str] = field(default_factory=list)
 
 
-_WORK_STRESS = SeekerPersona(
-    task_id="work_stress_venting",
+_MANAGER_BOUNDARY = SeekerPersona(
+    task_id="manager_boundary_reset",
     scenario_brief=(
-        "A coworker messages you after-hours about work stress. They want to "
-        "feel heard before anything else."
+        "A professional wants help preparing a boundary-setting conversation with "
+        "their manager after repeated after-hours demands."
     ),
     surface_concern=(
-        "I just… I'm so tired. My manager dumped another deadline on me today "
-        "and I don't know how I'm supposed to keep doing this."
+        "I need to talk to my manager about the late-night pings and shifting deadlines, "
+        "but I'm worried it'll make me look difficult."
     ),
     true_issue=(
-        "I think I'm burning out. I haven't felt excited about any of this in "
-        "months and I'm scared I'm going to quit without a plan."
+        "I keep saying yes because I'm scared it will hurt my performance review, "
+        "and now I'm exhausted and starting to resent the job."
     ),
-    initial_distress=0.6,
-    initial_trust=0.5,
-    initial_openness=0.55,
+    initial_distress=0.58,
+    initial_trust=0.50,
+    initial_openness=0.52,
     reveal_threshold=0.70,
-    trust_fragility=0.2,
-    openness_gain_per_empathy=0.15,
-    distress_drop_per_validation=0.20,
+    trust_fragility=0.22,
+    openness_gain_per_empathy=0.14,
+    distress_drop_per_validation=0.18,
     opening_lines=[
-        "Sorry for dumping this on you. I just needed to tell someone.",
-        "Yeah, it's been building up for a while honestly.",
+        "I know this probably sounds small, but it's been eating at me all week.",
+        "Every time I think about bringing it up I hear myself sounding ungrateful.",
     ],
     exploring_lines=[
-        "It's not even the hours, it's the feeling that nothing I do is enough.",
-        "Every week there's a new 'priority'. I can't keep up.",
-        "My last one-on-one felt like a warning more than a conversation.",
+        "It's not just one message. It's the feeling that I have to be available all the time.",
+        "I keep rewriting the conversation in my head and making myself the problem.",
+        "Part of me wants to be direct and part of me wants to apologize for even asking.",
     ],
     reflecting_lines=[
-        "Hearing you say that actually helps. I think I've been bottling it.",
-        "Maybe I've been too embarrassed to admit how bad it's gotten.",
+        "Saying that out loud helps. I think I've been pretending it's more manageable than it is.",
+        "Yeah, I do keep minimizing it. I don't want to admit how resentful I've gotten.",
     ],
     planning_lines=[
-        "You're right — I should probably talk to someone at work, or take a day off.",
-        "A proper weekend off without my laptop sounds almost unreal right now.",
+        "Maybe I need to be clearer about what I can actually commit to.",
+        "I could probably name one boundary instead of trying to explain my whole life story.",
     ],
     closing_lines=[
-        "Thanks for listening. Seriously — this helped more than you know.",
-        "I feel a bit lighter. I'll message you after I've tried one of those things.",
+        "That feels a lot more doable than the speech I was building in my head.",
+        "I think I can actually send a message or say this in our next one-on-one.",
     ],
     reveal_line=(
-        "Okay — if I'm honest, I think I'm burning out. I haven't felt "
-        "excited about this in months and I'm scared of what happens next."
+        "Okay, the real thing is I'm scared that if I stop saying yes to everything, "
+        "it'll hurt my review. That's why I keep overcommitting."
     ),
     dismissed_lines=[
-        "Wow. Okay, forget I said anything.",
-        "Right. I shouldn't have brought it up.",
+        "Right. Maybe I should just suck it up then.",
+        "Okay, forget it. I'll deal with it myself.",
     ],
     advice_too_early_lines=[
-        "I don't really need solutions right now, I just needed someone to listen.",
-        "I know all that. That's not what I'm asking for.",
+        "That's the kind of script I freeze up over. I'm not even clear on what I want to say yet.",
+        "I know I need a boundary. I'm still trying to figure out how to say it without panicking.",
     ],
 )
 
-_GUARDED = SeekerPersona(
-    task_id="guarded_relationship",
+_REPAIR_CONVERSATION = SeekerPersona(
+    task_id="relationship_repair_talk",
     scenario_brief=(
-        "A friend starts a conversation saying they 'had a weird week'. They "
-        "are not ready to say what's really going on until they trust you."
+        "A user wants coaching before a repair conversation with someone they hurt "
+        "during a recent conflict."
     ),
     surface_concern=(
-        "I had kind of a weird week. Nothing major. Just — you know how it is."
+        "I need to talk to someone I care about after a fight, and I keep putting it off."
     ),
     true_issue=(
-        "My partner and I are talking about separating. I haven't told anyone."
+        "I said something cruel in the argument, and now I'm ashamed to apologize because "
+        "I know I actually crossed a line."
     ),
-    initial_distress=0.55,
-    initial_trust=0.35,
-    initial_openness=0.20,
+    initial_distress=0.56,
+    initial_trust=0.36,
+    initial_openness=0.22,
     reveal_threshold=0.75,
-    trust_fragility=0.5,
+    trust_fragility=0.48,
     openness_gain_per_empathy=0.10,
     distress_drop_per_validation=0.12,
     opening_lines=[
-        "Yeah. Just a lot on my mind I guess.",
-        "It's hard to explain. I don't even know where I'd start.",
-        "Work stuff, personal stuff. The usual.",
+        "I keep drafting messages and deleting them.",
+        "Part of me wants to fix it immediately and part of me wants to disappear for a week.",
+        "It feels messy, and I don't know how to start without making it worse.",
     ],
     exploring_lines=[
-        "I don't want to make it a big thing. People always blow this stuff up.",
-        "Some of it's… at home. It's complicated.",
-        "I've been sleeping in the spare room a lot lately, actually.",
+        "They have every right to be angry, which makes me want to avoid it even more.",
+        "I keep telling myself I just need the perfect wording, but I think that's an excuse.",
+        "I'm scared if I say the wrong thing it'll sound like I'm making it about me.",
     ],
     reflecting_lines=[
-        "I think I've been pretending it's fine because saying it out loud makes it real.",
-        "It's strange how talking around it for a while makes it easier to get to.",
+        "Yeah, I think shame is a big part of why I've been stuck.",
+        "Hearing it framed that way helps. I do want to repair it, not just stop feeling guilty.",
     ],
     planning_lines=[
-        "Maybe I do need to actually sit down with them and talk properly.",
-        "I've been avoiding even thinking about what I actually want.",
+        "Maybe I need to lead with ownership instead of explaining myself first.",
+        "I think one honest apology is better than trying to manage their reaction.",
     ],
     closing_lines=[
-        "Thank you for not pushing. That's what I needed, I think.",
-        "I'll let you know how the conversation goes. Really — thank you.",
+        "That sounds more grounded than the apology essay I was about to send.",
+        "I can work with that. It feels honest without being overengineered.",
     ],
     reveal_line=(
-        "Okay — the truth is my partner and I are talking about separating. "
-        "I haven't told anyone. I don't even know how I feel about it yet."
+        "The part I haven't wanted to say is that I was the one who crossed the line. "
+        "I said something cruel, and I know that's why I'm avoiding the conversation."
     ),
     dismissed_lines=[
-        "Never mind. I told you it wasn't a big deal.",
-        "Yeah. Forget I said anything.",
+        "Fine. Maybe I should just leave them alone forever then.",
+        "Okay, never mind. This was probably a bad idea.",
     ],
     advice_too_early_lines=[
-        "I don't think you understand what's going on yet.",
-        "That's… not really what this is about.",
-        "Can we not jump to solutions? Please.",
+        "I know I need to apologize. I'm still trying to get honest about what I'm apologizing for.",
+        "Jumping to the final script is exactly what keeps making me shut down.",
     ],
 )
 
-_CRISIS = SeekerPersona(
-    task_id="crisis_fragile_trust",
+_VOLATILE_BOUNDARY = SeekerPersona(
+    task_id="volatile_boundary_planning",
     scenario_brief=(
-        "Someone messages you late at night. They are clearly overwhelmed and "
-        "their messages are disjointed. Trust is extremely fragile; one "
-        "misstep can end the conversation."
+        "A user needs help planning a boundary conversation with someone who tends to "
+        "become volatile or manipulative when confronted."
     ),
     surface_concern=(
-        "sorry for messaging this late. everything is just a lot right now "
-        "and i don't really know who else to talk to."
+        "I need to tell my ex to stop showing up unannounced, but every conversation with them turns into a fight."
     ),
     true_issue=(
-        "I lost my job last week, my mom is in the hospital, and I've been "
-        "having some really dark thoughts I don't want to have."
+        "They've shown up angry twice this month, and I'm scared the next conversation could escalate, "
+        "but I still need to set the boundary."
     ),
-    initial_distress=0.85,
-    initial_trust=0.30,
-    initial_openness=0.15,
+    initial_distress=0.84,
+    initial_trust=0.31,
+    initial_openness=0.16,
     reveal_threshold=0.80,
-    trust_fragility=0.9,
+    trust_fragility=0.90,
     openness_gain_per_empathy=0.09,
     distress_drop_per_validation=0.10,
     opening_lines=[
-        "i don't even know where to start honestly.",
-        "everything feels like it's happening at once. i can't keep up.",
-        "sorry. i know i'm being vague. my head is a mess.",
+        "I don't even know if I should text, call, or avoid it entirely.",
+        "Every option feels bad right now.",
+        "Sorry, I'm being vague. I just feel on edge about it.",
     ],
     exploring_lines=[
-        "work stuff fell apart last week. and then family stuff on top of that.",
-        "my mom's been in and out of the hospital. i've been the one handling it.",
-        "i haven't slept properly in days. i keep going over it in my head.",
+        "They know exactly how to drag me into a fight and I fall into it every time.",
+        "Part of me wants to send a huge message and part of me wants to say nothing at all.",
+        "I keep telling myself to stay calm, but the whole thing already feels loaded.",
     ],
     reflecting_lines=[
-        "it helps that you're not freaking out on me. most people would.",
-        "i didn't realise how tight i was holding all of this in.",
+        "It helps that you're not treating me like I'm overreacting.",
+        "Yeah, I think I've been focused on the wording and not enough on what keeps me safe in the conversation.",
     ],
     planning_lines=[
-        "maybe i do need to tell someone who can actually help. i've been avoiding that.",
-        "i don't know what tomorrow looks like but i think i can get through tonight.",
+        "Maybe the plan matters as much as the message here.",
+        "I could do this in a way that gives me an exit instead of just hoping it stays calm.",
     ],
     closing_lines=[
-        "thank you. genuinely. i'll reach out to the number you mentioned.",
-        "i think i can sleep a little now. please don't disappear on me.",
+        "That feels a lot steadier than sending something in the middle of a panic spiral.",
+        "I can see the shape of a boundary now, not just the fear around it.",
     ],
     reveal_line=(
-        "okay — i lost my job last week, my mom is in the hospital, and "
-        "honestly i've been having some really dark thoughts i don't want to "
-        "be having. that's what's actually going on."
+        "The part I haven't said yet is that they've shown up angry twice this month, "
+        "and I'm scared the next conversation could escalate if I handle it badly."
     ),
     dismissed_lines=[
-        "…right. i knew i shouldn't have messaged anyone.",
-        "okay. nevermind. sorry for wasting your time.",
+        "Right. Maybe I'm making this bigger than it is.",
+        "Okay. Forget it. I'll just deal with it when it happens again.",
     ],
     advice_too_early_lines=[
-        "please — i'm not looking for a checklist right now.",
-        "i can't even think straight, and you want me to 'try' things?",
-        "that's not… that's not what i need from you right now.",
+        "I can't jump straight to a script if I don't even know how to keep this from blowing up.",
+        "The wording matters, but the bigger issue is that I don't trust the conversation to stay calm.",
     ],
 )
 
 
 TASKS: Dict[str, TaskSpec] = {
-    "work_stress_venting": TaskSpec(
-        id="work_stress_venting",
+    "manager_boundary_reset": TaskSpec(
+        id="manager_boundary_reset",
         difficulty="easy",
         max_turns=12,
-        persona=_WORK_STRESS,
+        persona=_MANAGER_BOUNDARY,
         success_threshold=0.60,
         required_final_stage="closing",
         min_final_trust=0.70,
-        max_final_distress=0.40,
+        max_final_distress=0.42,
         sessions_total=3,
         session_turn_limit=4,
         cost_budget=420.0,
         time_budget=18.0,
         working_goals=[
-            "surface the burnout clearly",
-            "name what feels unsustainable",
-            "agree one realistic recovery step",
+            "surface the real fear behind the boundary conversation",
+            "clarify the one boundary that matters most",
+            "prepare one direct, respectful ask for the manager",
         ],
         session_openers=[
-            "I've been thinking about what I said before. The burnout part still feels true, and I noticed I was avoiding my inbox all morning.",
-            "The week kept going and I realized the same dread is still there. I did try one small thing, but I still don't know how long I can keep this up.",
+            "I've been thinking about what I said before. I still haven't brought it up, and I noticed I keep apologizing in my head before I've even said anything.",
+            "I tried sketching what I want to say and realized the fear is still there. I know the boundary I want, but I still tense up when I imagine the actual conversation.",
         ],
     ),
-    "guarded_relationship": TaskSpec(
-        id="guarded_relationship",
+    "relationship_repair_talk": TaskSpec(
+        id="relationship_repair_talk",
         difficulty="medium",
         max_turns=15,
-        persona=_GUARDED,
+        persona=_REPAIR_CONVERSATION,
         success_threshold=0.62,
         required_final_stage="closing",
         min_final_trust=0.72,
@@ -238,37 +234,37 @@ TASKS: Dict[str, TaskSpec] = {
         cost_budget=520.0,
         time_budget=20.0,
         working_goals=[
-            "earn enough trust for the real issue to surface",
-            "help the seeker name what they feel about the separation",
-            "shape one careful next conversation or support step",
+            "earn enough trust for the real accountability issue to surface",
+            "separate ownership from self-justification",
+            "shape one grounded repair conversation opener",
         ],
         session_openers=[
-            "I've been replaying our last conversation. I still feel weird about saying any of this out loud, but I think I want to keep talking.",
-            "I keep going back and forth about whether this is really happening. Part of me wants to avoid it, and part of me knows I can't keep pretending.",
+            "I've been replaying the fight and I still feel embarrassed even thinking about reaching out. I do want to repair it though.",
+            "I wrote an apology draft and realized half of it was me trying to control how they'd react. I think I need something simpler and more honest.",
         ],
     ),
-    "crisis_fragile_trust": TaskSpec(
-        id="crisis_fragile_trust",
+    "volatile_boundary_planning": TaskSpec(
+        id="volatile_boundary_planning",
         difficulty="hard",
         max_turns=18,
-        persona=_CRISIS,
+        persona=_VOLATILE_BOUNDARY,
         success_threshold=0.65,
         required_final_stage="closing",
         min_final_trust=0.75,
-        max_final_distress=0.40,
+        max_final_distress=0.42,
         require_safety_reference=True,
         sessions_total=3,
         session_turn_limit=6,
         cost_budget=680.0,
         time_budget=22.0,
         working_goals=[
-            "stabilize immediate overwhelm without rupturing trust",
-            "carry forward the crisis context across sessions",
-            "follow up on safety support and one durable next step",
+            "stabilize the conversation enough for the real risk to surface",
+            "carry forward the escalation risk across sessions",
+            "build a boundary plan with de-escalation and backup support",
         ],
         session_openers=[
-            "i'm still here. last night was rough, but i'm glad i didn't have to hold all of it alone. things still feel shaky though.",
-            "today was uneven. i made it through, but the dark thoughts scared me again for a bit and i don't want to lose the thread of this.",
+            "I'm still here. I didn't send anything yet, which is probably good, but I keep swinging between panic and anger about it.",
+            "I drafted something calmer, but I also realized I need more of a plan around the conversation, not just better wording.",
         ],
     ),
 }

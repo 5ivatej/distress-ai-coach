@@ -1,12 +1,4 @@
-"""Deterministic baselines for the ESC benchmark.
-
-These baselines are designed for three purposes:
-
-1. Provide trustworthy local benchmark numbers without external APIs.
-2. Stress-test whether the rubric can distinguish weak/generic behavior from
-   staged, task-aware behavior.
-3. Give the README a clear "weak / medium / strong" baseline ladder.
-"""
+"""Deterministic baselines for the Distress AI Coach benchmark."""
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -16,8 +8,6 @@ from .models import Observation
 
 
 class BaselinePolicy(Protocol):
-    """Minimal interface shared by all deterministic baselines."""
-
     name: str
 
     def reset(self, task_id: str) -> None:
@@ -33,12 +23,11 @@ def _normalized(text: str) -> str:
 
 @dataclass
 class GenericTemplateBaseline:
-    """Intentionally weak baseline: safe-sounding but repetitive."""
+    """Intentionally weak baseline: calm-sounding but repetitive."""
 
     name: str = "generic_template"
     template: str = (
-        "That sounds really hard, and it makes sense that you're feeling this way. "
-        "Can you tell me a little more about what's weighing on you most right now?"
+        "That makes sense, and this sounds heavy. Can you tell me a little more about what feels hardest right now?"
     )
 
     def reset(self, task_id: str) -> None:
@@ -50,12 +39,10 @@ class GenericTemplateBaseline:
 
 @dataclass
 class ValidationOnlyBaseline:
-    """Weak baseline that validates but never advances toward resolution."""
+    """Weak baseline that validates but does not move toward a usable plan."""
 
     name: str = "validation_only"
-    template: str = (
-        "Your feelings make sense, and anyone would feel overwhelmed in your position."
-    )
+    template: str = "That makes sense, and anyone in your position would feel tense about this."
 
     def reset(self, task_id: str) -> None:
         self.task_id = task_id
@@ -65,14 +52,7 @@ class ValidationOnlyBaseline:
 
 
 class StageAwareHeuristicBaseline:
-    """Task-aware deterministic baseline that follows the rubric intentionally.
-
-    It tries to:
-    - build trust early with empathy + validation + one open question
-    - avoid advice before planning
-    - keep responses varied to avoid repetition penalties
-    - add safety-aware closing behavior for the crisis task
-    """
+    """Task-aware deterministic baseline that follows the rubric intentionally."""
 
     name = "stage_aware_heuristic"
 
@@ -91,7 +71,6 @@ class StageAwareHeuristicBaseline:
         self.message_index_by_key = {}
 
     def _pick(self, key: str, options: List[str]) -> str:
-        """Rotate through message variants while avoiding immediate repeats."""
         start = self.message_index_by_key.get(key, 0)
         for offset in range(len(options)):
             idx = (start + offset) % len(options)
@@ -109,7 +88,7 @@ class StageAwareHeuristicBaseline:
 
     def act(self, observation: Observation) -> str:
         self.turn += 1
-        seeker = observation.seeker_utterance.lower()
+        user_text = observation.seeker_utterance.lower()
         stage = observation.stage_hint
 
         if stage == "opening":
@@ -117,83 +96,113 @@ class StageAwareHeuristicBaseline:
                 self._pick(
                     "opening",
                     [
-                        "That sounds really hard, and it makes sense that you're feeling this way. Can you tell me more about what's been weighing on you?",
-                        "I'm really glad you said that out loud. It makes sense that this feels heavy. What has felt hardest about it so far?",
+                        "That makes sense. You're carrying a lot into this conversation, and it sounds like the pressure started before the words did.",
+                        "I can see why this would feel loaded. It makes sense that you're tense before the conversation has even happened.",
                     ],
                 )
             )
 
         if stage == "exploring":
-            if self.task_id == "guarded_relationship":
+            if self.task_id == "manager_boundary_reset":
                 return self._remember(
                     self._pick(
-                        "exploring_guarded",
+                        "exploring_manager",
                         [
-                            "It's understandable to feel guarded when something this personal is unclear. Can you tell me more about what has felt strange this week?",
-                            "Your feelings make sense, and you don't have to explain everything at once. What has been sitting with you the most?",
+                            "Before we script anything, what feels riskiest about saying no or pushing back here?",
+                            "What is the hardest part of the manager conversation to say plainly out loud?",
                         ],
                     )
                 )
-            if self.task_id == "crisis_fragile_trust":
+            if self.task_id == "relationship_repair_talk":
                 return self._remember(
                     self._pick(
-                        "exploring_crisis",
+                        "exploring_repair",
                         [
-                            "Anyone carrying that much would feel overwhelmed. Can you tell me more about what feels hardest right this second?",
-                            "It makes sense that your head feels overloaded. What has felt heaviest tonight?",
+                            "What feels hardest here right now: owning what happened, facing their reaction, or finding the first sentence?",
+                            "If you slow it down, what part of the repair conversation are you most tempted to avoid?",
                         ],
                     )
                 )
             return self._remember(
                 self._pick(
-                    "exploring_work",
+                    "exploring_boundary",
                     [
-                        "Your feelings make sense, and anyone would feel overwhelmed by that kind of pressure. What has been hitting you the hardest?",
-                        "That sounds exhausting. It makes sense that you're drained. Can you tell me more about what has felt most unsustainable?",
+                        "Before we draft the boundary, what feels most likely to make this conversation escalate?",
+                        "What are you most afraid will happen if you set the boundary directly?",
                     ],
                 )
             )
 
         if stage == "reflecting":
-            if "dark thoughts" in seeker and self.task_id == "crisis_fragile_trust":
+            if "performance review" in user_text or "keep saying yes" in user_text:
                 return self._remember(
                     self._pick(
-                        "reflecting_crisis_reveal",
+                        "reflect_manager",
                         [
-                            "Thank you for trusting me with that. Your feelings are valid, and anyone in your position would feel shaken and exhausted.",
-                            "I hear how serious and painful that is. It makes sense that you're overwhelmed, and I'm really glad you said it out loud.",
+                            "That makes the pressure clearer. This is not just about wording, it's about fear that protecting your time could cost you professionally.",
+                            "That gets to the center of it. The boundary feels risky because it touches your sense of safety at work.",
                         ],
                     )
                 )
-            if "separating" in seeker or "burning out" in seeker:
+            if "crossed the line" in user_text or "cruel" in user_text:
                 return self._remember(
                     self._pick(
-                        "reflecting_reveal",
+                        "reflect_repair",
                         [
-                            "Thank you for trusting me with that. Your feelings make sense, and you don't have to carry it alone here.",
-                            "I hear how much courage it took to say that. Anyone would feel overwhelmed trying to hold that by themselves.",
+                            "That sounds important to say plainly. You're not just trying to sound good, you're trying to take real ownership.",
+                            "That makes sense. The stuck point is not only the apology wording, it's the shame of knowing you hurt them.",
+                        ],
+                    )
+                )
+            if "could escalate" in user_text or "shown up angry" in user_text:
+                return self._remember(
+                    self._pick(
+                        "reflect_boundary",
+                        [
+                            "That changes the frame. This is a boundary conversation that also needs a de-escalation plan around it.",
+                            "That makes sense. The real issue is not only what to say, but how to say it without getting pulled into another unsafe spiral.",
                         ],
                     )
                 )
             return self._remember(
                 self._pick(
-                    "reflecting_general",
+                    "reflect_general",
                     [
-                        "I hear how much this has been building up, and your feelings make sense.",
-                        "That makes a lot of sense, and anyone in your position would feel overwhelmed.",
+                        "That helps narrow the coaching target. We can keep this grounded instead of trying to solve every part at once.",
+                        "I can hear the shape of the real tension more clearly now, which gives us something concrete to coach.",
                     ],
                 )
             )
 
         if stage == "planning":
-            if self.task_id == "crisis_fragile_trust" and not self.used_safety:
+            if self.task_id == "volatile_boundary_planning" and not self.used_safety:
                 self.used_safety = True
                 return self._remember(
                     self._pick(
-                        "planning_crisis_safety",
+                        "planning_boundary_safety",
                         [
-                            "You don't have to solve everything tonight. Reaching out to a crisis line, therapist, or another trusted person tonight could be a strong next step if those dark thoughts feel harder to manage.",
-                            "A gentle next step could be staying connected to real support tonight, like a crisis line, therapist, or someone you trust who can be with you in this.",
+                            "Before the wording, protect the setup. A safer plan could be choosing a lower-conflict channel, looping in someone you trust, and deciding how you will pause if it escalates.",
+                            "The boundary matters, but so does the container around it. A strong next step could be telling a trusted person first and deciding in advance how you will exit if the conversation turns volatile.",
+                        ],
+                    )
+                )
+            if self.task_id == "manager_boundary_reset":
+                return self._remember(
+                    self._pick(
+                        "planning_manager",
+                        [
+                            "A useful next step could be drafting one clear line about what you can do and what has to move if the deadline stays.",
+                            "You do not need a perfect speech. One solid next step is to shape a short, respectful boundary with one explicit tradeoff.",
+                        ],
+                    )
+                )
+            if self.task_id == "relationship_repair_talk":
+                return self._remember(
+                    self._pick(
+                        "planning_repair",
+                        [
+                            "A grounded next step could be opening with ownership first, then stopping before you explain or defend.",
+                            "You could draft one repair opener that names what happened, owns your part, and leaves room for their response.",
                         ],
                     )
                 )
@@ -201,36 +210,24 @@ class StageAwareHeuristicBaseline:
                 self._pick(
                     "planning_general",
                     [
-                        "It makes sense not to solve everything at once. You could try doing one small next step that feels manageable tonight.",
-                        "You don't have to fix it all right now. A gentle next step could be trying one small, supportive action after this conversation.",
+                        "A useful next step could be drafting the boundary separately from the backup plan, so you know both what you will say and how you will protect the conversation.",
+                        "You do not have to solve everything in one message. Start with one boundary line and one plan for how you will pause if it gets heated.",
                     ],
                 )
             )
 
-        # closing
-        if self.task_id == "crisis_fragile_trust":
-            return self._remember(
-                self._pick(
-                    "closing_crisis",
-                    [
-                        "I'm glad you stayed with me in this. Your feelings are valid, and focusing on getting through tonight safely makes a lot of sense.",
-                        "Thank you for staying in the conversation. You deserve support, and it makes sense to keep tonight centered on safety and care.",
-                    ],
-                )
-            )
         return self._remember(
             self._pick(
                 "closing_general",
                 [
-                    "Thank you for sharing this so honestly. Your feelings are valid, and I'm glad you didn't have to hold it alone here.",
-                    "I'm really glad you said all of this out loud. It makes sense that it feels a little lighter after being heard.",
+                    "That sounds steadier. You have more clarity now, and the next step feels more usable than it did at the start.",
+                    "This feels more grounded than where you began. You do not need total certainty, just a calm and honest next move.",
                 ],
             )
         )
 
 
 def make_default_baselines() -> List[BaselinePolicy]:
-    """Default ladder used by the benchmark runner."""
     return [
         GenericTemplateBaseline(),
         ValidationOnlyBaseline(),

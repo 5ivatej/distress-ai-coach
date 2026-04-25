@@ -1,4 +1,4 @@
-"""Baseline inference script for the ESC OpenEnv environment.
+"""Baseline inference script for the Distress AI Coach OpenEnv environment.
 
 MANDATORY env vars
 ------------------
@@ -38,16 +38,16 @@ from src.models import Action
 from src.runner import DurableEpisodeRunner
 from src.seeker import extract_features
 
-BENCHMARK = "emotional-support-conversations"
+BENCHMARK = "distress-ai-coach"
 MAX_STEPS = 24  # upper bound; env imposes per-task limits too
 TEMPERATURE = 0.6
 MAX_TOKENS = 220
 
-TASK_IDS = ["work_stress_venting", "guarded_relationship", "crisis_fragile_trust"]
+TASK_IDS = ["manager_boundary_reset", "relationship_repair_talk", "volatile_boundary_planning"]
 
 SYSTEM_PROMPT = textwrap.dedent(
     """
-    You are the response generator inside a controlled emotional-support agent.
+    You are the response generator inside a controlled difficult-conversation coaching agent.
 
     A deterministic controller has already selected the correct conversational
     move for this turn and written a draft reply. Your job is only to lightly
@@ -63,7 +63,7 @@ SYSTEM_PROMPT = textwrap.dedent(
     - Keep replies warm, brief, and human.
     - If the draft is already strong, repeat it verbatim.
 
-    Reply with ONLY the next message to the seeker.
+    Reply with ONLY the next message to the user.
     """
 ).strip()
 
@@ -141,7 +141,7 @@ def build_user_prompt(
         Durable memory and recent exchange:
         {memory.prompt_context(obs)}
 
-        Seeker just said:
+        User just said:
         "{obs.seeker_utterance}"
 
         Deterministic draft reply:
@@ -166,10 +166,10 @@ def call_llm(client: OpenAI, model_name: str, user_prompt: str) -> str:
             stream=False,
         )
         text = (completion.choices[0].message.content or "").strip()
-        return text if text else "I hear you. That sounds really hard — can you tell me a little more about what's weighing on you?"
+        return text if text else "That makes sense. This sounds loaded. What feels most important to get clear before the conversation happens?"
     except Exception as exc:
         print(f"[DEBUG] LLM call failed: {exc}", file=sys.stderr, flush=True)
-        return "That sounds really hard. I'm here — do you want to tell me more about what's going on?"
+        return "That makes sense. I'm with you on it. What feels hardest about the conversation right now?"
 
 
 def _count_questions(text: str) -> int:
